@@ -37,7 +37,7 @@ body {
     to { transform: translate(-50%, -50%); }
 }
 
-/* Master Structural Lock (Locks Game Container Dead-Center Permanently) */
+/* Master Structural Lock */
 .screen-center-wrapper {
     position: absolute;
     top: 50%;
@@ -49,7 +49,7 @@ body {
     width: 100vw;
     height: 100vh;
     pointer-events: none;
-    z-index: 1; /* Sits below the sidebar overlay layer */
+    z-index: 1;
 }
 .game-container {
     text-align: center;
@@ -89,16 +89,12 @@ body {
 #click-btn {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Forces the graphic to map cleanly to circular bounds */
+    object-fit: cover;
     cursor: pointer;
     filter: drop-shadow(0 0 25px #a124ff);
     transition: transform 0.1s ease, filter 0.1s ease;
     animation: spin 40s linear infinite;
-    
-    /* CUTS AWAY RECTANGULAR CORNERS: Changes the sharp image asset outline to a perfect circle */
     border-radius: 50%; 
-    
-    /* Blends dark tones into background stars while lifting bright accretion disks */
     mix-blend-mode: color-dodge; 
 }
 #click-btn:hover {
@@ -113,7 +109,7 @@ body {
 
 /* Top UI Toggle Control Buttons */
 .shop-toggle, .settings-toggle {
-    position: fixed; /* Keeps buttons locked in top view corners */
+    position: fixed;
     top: 20px;
     background: #a124ff;
     color: #020208;
@@ -135,7 +131,7 @@ body {
 
 /* Detached Floating Sidebar Overlay Panels */
 .shop-menu, .settings-menu {
-    position: fixed; /* Changes behavior to float on top layers safely */
+    position: fixed;
     top: 0;
     width: 320px;
     height: 100vh;
@@ -144,27 +140,24 @@ body {
     padding: 30px 20px;
     display: flex;
     flex-direction: column;
-    z-index: 20; /* Places menus entirely above layout graphics */
+    z-index: 20;
     transition: transform 0.4s cubic-bezier(0.1, 0.9, 0.2, 1);
 }
 
-/* Shop slides overlay framework from Right margin */
 .shop-menu {
     right: 0;
     border-left: 2px solid #a124ff;
-    transform: translateX(350px); /* Hidden right side entry hook */
+    transform: translateX(350px);
 }
 .shop-menu.open { transform: translateX(0); }
 
-/* Settings slides overlay framework from Left margin */
 .settings-menu {
     left: 0;
     border-right: 2px solid #a124ff;
-    transform: translateX(-350px); /* Hidden left side entry hook */
+    transform: translateX(-350px);
 }
 .settings-menu.open { transform: translateX(0); }
 
-/* Close Buttons inside Sidebars */
 .shop-close, .settings-close {
     background: none;
     border: none;
@@ -187,7 +180,7 @@ body {
 .shop-section, .settings-section { margin-bottom: 25px; }
 .shop-section h3, .settings-section h3 { font-size: 0.9rem; color: #888; margin-bottom: 10px; }
 
-/* Action Interface Buttons */
+/* Inside Menu Buttons */
 .shop-btn, .reset-btn {
     width: 100%;
     padding: 12px;
@@ -213,7 +206,52 @@ body {
 .shop-btn:disabled { border-color: #333; color: #555; cursor: not-allowed; }
 .shop-btn:disabled .cost { color: #555; }
 
-/* Settings Rest Custom Layouts */
+/* NEW: Promo Code Box Styling Layouts */
+.code-input-container {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+}
+#promo-code-input {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid #a124ff;
+    border-radius: 6px;
+    padding: 10px;
+    color: #00ffcc;
+    font-family: inherit;
+    font-size: 0.85rem;
+    outline: none;
+    text-transform: uppercase; /* Automatically forces typed codes into uppercase */
+}
+#promo-code-input:focus {
+    border-color: #00ffcc;
+    box-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
+}
+#promo-code-btn {
+    background: #00ffcc;
+    color: #020208;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 15px;
+    font-family: inherit;
+    font-weight: bold;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+#promo-code-btn:hover {
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+.code-msg {
+    font-size: 0.8rem;
+    margin-top: 8px;
+    min-height: 18px;
+    font-weight: bold;
+}
+
+/* Settings Reset Layouts */
 .reset-btn {
     background: transparent;
     border: 1px solid #ef4444;
