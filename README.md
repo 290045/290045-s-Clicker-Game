@@ -3,7 +3,7 @@
 A space-themed, incremental idle clicker game built from scratch using pure HTML, CSS, and vanilla JavaScript. Harvest dark matter, collapse space-time, and expand your cosmic power directly from your web browser.
 
 ## 🚀 Live Demo
-Play the game live right here: **[Insert Your GitHub Pages URL Here]**
+Play the game live right here: **https://290045.github.io/290045-s-Clicker-Game/**
 
 ---
 
