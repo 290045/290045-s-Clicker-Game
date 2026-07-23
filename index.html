@@ -3,20 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>290045's Clicker</title>
+    <title>290045's Blackhole Clicker</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="game-container">
-        <h1>Dark Matter: <span id="score">0</span></h1>
-        <!-- The interactive black hole element -->
-        <div id="black-hole-wrapper">
-            <button id="click-btn">🕳️</button>
+    <!-- Animated space background container -->
+    <div class="space-bg"></div>
+
+    <!-- Shop Trigger Button Top Right -->
+    <button id="shop-toggle-btn" class="shop-toggle">🌌 Open Shop</button>
+
+    <!-- Slide-out Shop Menu Container -->
+    <div id="shop-menu" class="shop-menu">
+        <button id="shop-close-btn" class="shop-close">✕ Close</button>
+        <h2>Cosmic Shop</h2>
+        
+        <div class="shop-section">
+            <h3>Manual Upgrades</h3>
+            <button id="buy-click-up" class="shop-btn" disabled>
+                Quantum Tap (+1/click)<br><span class="cost">Cost: 15</span>
+            </button>
         </div>
-        <div class="shop">
-            <button id="buy-auto" disabled>Create Mini Singularity (Cost: 10)</button>
+
+        <div class="shop-section">
+            <h3>Automated Upgrades</h3>
+            <button id="buy-auto-up" class="shop-btn" disabled>
+                Mini Singularity (+1/sec)<br><span class="cost">Cost: 50</span>
+            </button>
         </div>
     </div>
+
+    <!-- Center Screen Game Layout -->
+    <div class="game-container">
+        <div class="counter-box">
+            <span class="label">DARK MATTER</span>
+            <h1 id="score">0</h1>
+            <span id="pps-display" class="sub-label">0 per second</span>
+        </div>
+        
+        <!-- Black hole clicker image wrapper -->
+        <div id="click-btn-container">
+            <img id="click-btn" src="blackhole.png" alt="Black Hole Clicker">
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
