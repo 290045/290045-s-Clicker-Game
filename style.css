@@ -37,14 +37,26 @@ body {
     to { transform: translate(-50%, -50%); }
 }
 
-/* Centered Main Game Layout */
+/* Master Structural Lock (Locks Game Container Dead-Center Permanently) */
+.screen-center-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 1; /* Sits below the sidebar overlay layer */
+}
 .game-container {
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    pointer-events: none;
 }
 .counter-box {
     background: rgba(10, 5, 20, 0.75);
@@ -73,8 +85,6 @@ body {
     align-items: center;
     justify-content: center;
     pointer-events: auto;
-    margin-top: auto;
-    margin-bottom: auto;
 }
 #click-btn {
     width: 100%;
@@ -96,9 +106,9 @@ body {
     100% { transform: rotate(360deg); }
 }
 
-/* Top UI Buttons (Shop on Right, Settings on Left) */
+/* Top UI Toggle Control Buttons */
 .shop-toggle, .settings-toggle {
-    position: absolute;
+    position: fixed; /* Keeps buttons locked in top view corners */
     top: 20px;
     background: #a124ff;
     color: #020208;
@@ -118,37 +128,38 @@ body {
 .shop-toggle:hover, .settings-toggle:hover { background: #b54fff; }
 .shop-toggle:active, .settings-toggle:active { transform: scale(0.95); }
 
-/* Slide-out Menu Panels (Base Structure) */
+/* Detached Floating Sidebar Overlay Panels */
 .shop-menu, .settings-menu {
-    position: absolute;
+    position: fixed; /* Changes behavior to float on top layers safely */
     top: 0;
     width: 320px;
     height: 100vh;
     background: rgba(10, 5, 25, 0.95);
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
     padding: 30px 20px;
     display: flex;
     flex-direction: column;
-    z-index: 20;
+    z-index: 20; /* Places menus entirely above layout graphics */
     transition: transform 0.4s cubic-bezier(0.1, 0.9, 0.2, 1);
 }
 
-/* Shop slides in from Right side */
+/* Shop slides overlay framework from Right margin */
 .shop-menu {
     right: 0;
     border-left: 2px solid #a124ff;
-    transform: translateX(350px);
+    transform: translateX(350px); /* Hidden right side entry hook */
 }
 .shop-menu.open { transform: translateX(0); }
 
-/* Settings slides in from Left side */
+/* Settings slides overlay framework from Left margin */
 .settings-menu {
     left: 0;
     border-right: 2px solid #a124ff;
-    transform: translateX(-350px);
+    transform: translateX(-350px); /* Hidden left side entry hook */
 }
 .settings-menu.open { transform: translateX(0); }
 
+/* Close Buttons inside Sidebars */
 .shop-close, .settings-close {
     background: none;
     border: none;
@@ -156,7 +167,9 @@ body {
     cursor: pointer;
     font-family: inherit;
     font-size: 1rem;
+    transition: color 0.2s;
 }
+.shop-close:hover, .settings-close:hover { color: #f87171; }
 .shop-close { align-self: flex-end; }
 .settings-close { align-self: flex-start; }
 
@@ -169,7 +182,7 @@ body {
 .shop-section, .settings-section { margin-bottom: 25px; }
 .shop-section h3, .settings-section h3 { font-size: 0.9rem; color: #888; margin-bottom: 10px; }
 
-/* Inside Menu Buttons */
+/* Action Interface Buttons */
 .shop-btn, .reset-btn {
     width: 100%;
     padding: 12px;
@@ -195,7 +208,7 @@ body {
 .shop-btn:disabled { border-color: #333; color: #555; cursor: not-allowed; }
 .shop-btn:disabled .cost { color: #555; }
 
-/* Settings Hard Reset Custom Button Styles */
+/* Settings Rest Custom Layouts */
 .reset-btn {
     background: transparent;
     border: 1px solid #ef4444;
@@ -211,18 +224,4 @@ body {
     color: #888;
     margin-top: 8px;
     line-height: 1.4;
-}
-
-/* Master Structural Lock */
-.screen-center-wrapper {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100vw;
-    height: 100vh;
-    pointer-events: none;
 }
