@@ -1,0 +1,52 @@
+body {
+    background-color: #020208; /* Deep cosmic void background */
+    color: #a124ff; /* Event horizon purple/neon violet text */
+    font-family: 'Courier New', Courier, monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+}
+.game-container {
+    text-align: center;
+    background: rgba(10, 5, 20, 0.6);
+    padding: 40px;
+    border-radius: 20px;
+    border: 1px solid #a124ff;
+    box-shadow: 0 0 30px rgba(161, 36, 255, 0.2);
+}
+#black-hole-wrapper {
+    margin: 30px 0;
+    display: inline-block;
+    position: relative;
+}
+#click-btn {
+    font-size: 110px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s;
+    filter: drop-shadow(0 0 15px #a124ff); /* Gives the black hole a purple glow */
+}
+#click-btn:active {
+    transform: scale(0.85); /* Black hole collapses inward slightly when clicked */
+}
+button#buy-auto {
+    background: #a124ff;
+    color: #020208;
+    border: none;
+    padding: 12px 24px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(161, 36, 255, 0.4);
+    font-family: inherit;
+}
+button:disabled {
+    background-color: #1a1525 !important;
+    color: #555 !important;
+    box-shadow: none !important;
+    cursor: not-allowed;
+}
