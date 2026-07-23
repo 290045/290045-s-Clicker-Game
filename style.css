@@ -44,7 +44,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    pointer-events: none; /* Allows clicks to bypass container to targets */
+    pointer-events: none;
 }
 .counter-box {
     background: rgba(10, 5, 20, 0.75);
@@ -64,17 +64,17 @@ body {
 .label { font-size: 0.9rem; letter-spacing: 3px; color: #a124ff; }
 .sub-label { font-size: 0.8rem; color: #888; }
 
-/* Image Clicker Settings (LOCKS DOWN POSITION AND BLENDS OUT THE BLACK BOX BACKGROUND) */
+/* Image Clicker Settings */
 #click-btn-container {
     width: 280px;
     height: 280px;
-    min-height: 280px; /* Reserves the exact image size on refresh so it never collapses up */
+    min-height: 280px;
     display: flex;
     align-items: center;
     justify-content: center;
     pointer-events: auto;
-    margin-top: auto;    /* Pushes layout elements away from edges evenly */
-    margin-bottom: auto; /* Vertically locks down the center of the viewport */
+    margin-top: auto;
+    margin-bottom: auto;
 }
 #click-btn {
     width: 100%;
@@ -84,8 +84,6 @@ body {
     filter: drop-shadow(0 0 25px #a124ff);
     transition: transform 0.1s ease, filter 0.1s ease;
     animation: spin 40s linear infinite;
-    
-    /* REMOVES THE BLACK BOX BACKGROUND: Keeps glowing parts visible and drops pure black away */
     mix-blend-mode: screen; 
 }
 #click-btn:hover {
@@ -98,11 +96,10 @@ body {
     100% { transform: rotate(360deg); }
 }
 
-/* Top Right Shop Toggle Button */
-.shop-toggle {
+/* Top UI Buttons (Shop on Right, Settings on Left) */
+.shop-toggle, .settings-toggle {
     position: absolute;
     top: 20px;
-    right: 20px;
     background: #a124ff;
     color: #020208;
     border: none;
@@ -114,59 +111,67 @@ body {
     cursor: pointer;
     box-shadow: 0 0 15px rgba(161, 36, 255, 0.4);
     z-index: 10;
-    transition: background 0.2s;
+    transition: background 0.2s, transform 0.1s;
 }
-.shop-toggle:hover { background: #b54fff; }
+.shop-toggle { right: 20px; }
+.settings-toggle { left: 20px; }
+.shop-toggle:hover, .settings-toggle:hover { background: #b54fff; }
+.shop-toggle:active, .settings-toggle:active { transform: scale(0.95); }
 
-/* Slide-out Menu Panel */
-.shop-menu {
+/* Slide-out Menu Panels (Base Structure) */
+.shop-menu, .settings-menu {
     position: absolute;
     top: 0;
-    right: -350px; /* Hidden off-screen right side by default */
     width: 320px;
     height: 100vh;
     background: rgba(10, 5, 25, 0.95);
-    border-left: 2px solid #a124ff;
-    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
     padding: 30px 20px;
     display: flex;
     flex-direction: column;
     z-index: 20;
-    transition: right 0.4s cubic-bezier(0.1, 0.9, 0.2, 1);
+    transition: transform 0.4s cubic-bezier(0.1, 0.9, 0.2, 1);
 }
-.shop-menu.open {
-    right: 0; /* Slides into view when class is active */
+
+/* Shop slides in from Right side */
+.shop-menu {
+    right: 0;
+    border-left: 2px solid #a124ff;
+    transform: translateX(350px);
 }
-.shop-close {
+.shop-menu.open { transform: translateX(0); }
+
+/* Settings slides in from Left side */
+.settings-menu {
+    left: 0;
+    border-right: 2px solid #a124ff;
+    transform: translateX(-350px);
+}
+.settings-menu.open { transform: translateX(0); }
+
+.shop-close, .settings-close {
     background: none;
     border: none;
     color: #ef4444;
     cursor: pointer;
     font-family: inherit;
     font-size: 1rem;
-    align-self: flex-end;
 }
-.shop-menu h2 {
+.shop-close { align-self: flex-end; }
+.settings-close { align-self: flex-start; }
+
+.shop-menu h2, .settings-menu h2 {
     color: #00ffcc;
     border-bottom: 1px solid #a124ff;
     padding-bottom: 10px;
     margin-top: 10px;
 }
-.shop-section {
-    margin-bottom: 25px;
-}
-.shop-section h3 {
-    font-size: 0.9rem;
-    color: #888;
-    margin-bottom: 10px;
-}
+.shop-section, .settings-section { margin-bottom: 25px; }
+.shop-section h3, .settings-section h3 { font-size: 0.9rem; color: #888; margin-bottom: 10px; }
 
-/* Inside Shop Action Buttons */
-.shop-btn {
+/* Inside Menu Buttons */
+.shop-btn, .reset-btn {
     width: 100%;
-    background: transparent;
-    border: 1px solid #a124ff;
-    color: #a124ff;
     padding: 12px;
     font-family: inherit;
     font-size: 0.9rem;
@@ -176,20 +181,48 @@ body {
     text-align: left;
     transition: all 0.2s;
 }
+.shop-btn {
+    background: transparent;
+    border: 1px solid #a124ff;
+    color: #a124ff;
+}
 .shop-btn:hover:not(:disabled) {
     background: rgba(161, 36, 255, 0.15);
     color: #00ffcc;
     border-color: #00ffcc;
 }
-.shop-btn .cost {
-    display: block;
-    font-size: 0.8rem;
-    color: #00ffcc;
-    margin-top: 4px;
-}
-.shop-btn:disabled {
-    border-color: #333;
-    color: #555;
-    cursor: not-allowed;
-}
+.shop-btn .cost { display: block; font-size: 0.8rem; color: #00ffcc; margin-top: 4px; }
+.shop-btn:disabled { border-color: #333; color: #555; cursor: not-allowed; }
 .shop-btn:disabled .cost { color: #555; }
+
+/* Settings Hard Reset Custom Button Styles */
+.reset-btn {
+    background: transparent;
+    border: 1px solid #ef4444;
+    color: #ef4444;
+    text-align: center;
+}
+.reset-btn:hover {
+    background: rgba(239, 68, 68, 0.15);
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+}
+.settings-warn {
+    font-size: 0.75rem;
+    color: #888;
+    margin-top: 8px;
+    line-height: 1.4;
+}
+
+/* Master Structural Lock */
+.screen-center-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+}
