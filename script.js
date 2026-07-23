@@ -112,15 +112,11 @@ promoCodeBtn.addEventListener('click', () => {
     }
 
     // LIST OF ACTIVE CODES: Add or change secret phrases here!
-    if (enteredCode === "NEBULA") {
+    if (enteredCode === "RELEASE!") {
         score += 500; // Gives 500 dark matter
         successfulRedeem(enteredCode, "Gained 500 Dark Matter!");
     } 
-    else if (enteredCode === "VOID") {
-        score += 5000; // Gives 5000 dark matter
-        successfulRedeem(enteredCode, "Gained 5,000 Dark Matter!");
-    }
-    else if (enteredCode === "CHEATER") {
+    else if (enteredCode === "SECRET") {
         clickPower += 10; // Instantly gives massive click strength
         successfulRedeem(enteredCode, "Quantum Tap boosted +10!");
     }
