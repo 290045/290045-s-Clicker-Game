@@ -25,16 +25,27 @@ const settingsToggleBtn = document.getElementById('settings-toggle-btn');
 const settingsCloseBtn = document.getElementById('settings-close-btn');
 const hardResetBtn = document.getElementById('hard-reset-btn');
 
-// Open/Close Panels Interactions
+// Toggle Function: Controls Shop Visibility States Safely
 shopToggleBtn.addEventListener('click', () => {
-    shopMenu.classList.add('open');
-    settingsMenu.classList.remove('open'); // Auto close settings if shop opens
+    // If shop is already open, clicking again hides it cleanly
+    if (shopMenu.classList.contains('open')) {
+        shopMenu.classList.remove('open');
+    } else {
+        shopMenu.classList.add('open');
+        settingsMenu.classList.remove('open'); // Auto hides open settings menu panel
+    }
 });
 shopCloseBtn.addEventListener('click', () => shopMenu.classList.remove('open'));
 
+// Toggle Function: Controls Settings Visibility States Safely
 settingsToggleBtn.addEventListener('click', () => {
-    settingsMenu.classList.add('open');
-    shopMenu.classList.remove('open'); // Auto close shop if settings opens
+    // If settings is already open, clicking again hides it cleanly
+    if (settingsMenu.classList.contains('open')) {
+        settingsMenu.classList.remove('open');
+    } else {
+        settingsMenu.classList.add('open');
+        shopMenu.classList.remove('open'); // Auto hides open shop menu panel
+    }
 });
 settingsCloseBtn.addEventListener('click', () => settingsMenu.classList.remove('open'));
 
@@ -109,20 +120,17 @@ function loadGame() {
 
 // Settings Action: Hard Reset Game Progress
 hardResetBtn.addEventListener('click', () => {
-    // Show a native confirmation prompt window first
     const confirmReset = confirm("Are you completely sure you want to collapse reality? This deletes ALL your progress permanently.");
     
     if (confirmReset) {
-        localStorage.removeItem('blackholeClickerSave'); // Clear save entry
+        localStorage.removeItem('blackholeClickerSave');
         
-        // Restore initial setup numbers
         score = 0;
         clickPower = 1;
         autoProduction = 0;
         clickUpgradeCost = 15;
         autoUpgradeCost = 50;
         
-        // Close menu and update view dashboard layouts
         settingsMenu.classList.remove('open');
         updateDisplay();
     }
