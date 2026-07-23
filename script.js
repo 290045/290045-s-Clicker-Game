@@ -3,7 +3,7 @@ let score = 0;
 let clickPower = 1;
 let autoProduction = 0;
 
-// Dynamic Scaling Costs
+// Dynamic Scaling Base Costs
 let clickUpgradeCost = 15;
 let autoUpgradeCost = 50;
 
@@ -19,9 +19,24 @@ const shopCloseBtn = document.getElementById('shop-close-btn');
 const buyClickUpBtn = document.getElementById('buy-click-up');
 const buyAutoUpBtn = document.getElementById('buy-auto-up');
 
-// Open/Close Shop Interactions
-shopToggleBtn.addEventListener('click', () => shopMenu.classList.add('open'));
+// Settings UI Interface Components
+const settingsMenu = document.getElementById('settings-menu');
+const settingsToggleBtn = document.getElementById('settings-toggle-btn');
+const settingsCloseBtn = document.getElementById('settings-close-btn');
+const hardResetBtn = document.getElementById('hard-reset-btn');
+
+// Open/Close Panels Interactions
+shopToggleBtn.addEventListener('click', () => {
+    shopMenu.classList.add('open');
+    settingsMenu.classList.remove('open'); // Auto close settings if shop opens
+});
 shopCloseBtn.addEventListener('click', () => shopMenu.classList.remove('open'));
+
+settingsToggleBtn.addEventListener('click', () => {
+    settingsMenu.classList.add('open');
+    shopMenu.classList.remove('open'); // Auto close shop if settings opens
+});
+settingsCloseBtn.addEventListener('click', () => settingsMenu.classList.remove('open'));
 
 // Main Refresh Engine
 function updateDisplay() {
@@ -47,9 +62,10 @@ clickBtn.addEventListener('click', () => {
 buyClickUpBtn.addEventListener('click', () => {
     if (score >= clickUpgradeCost) {
         score -= clickUpgradeCost;
-        clickPower += 1; // Increases manual click yields by 1
-        clickUpgradeCost = Math.round(clickUpgradeCost * 1.6); // Scale multiplier cost
+        clickPower += 1;
+        clickUpgradeCost = Math.round(clickUpgradeCost * 1.6);
         updateDisplay();
+        saveGame();
     }
 });
 
@@ -57,13 +73,63 @@ buyClickUpBtn.addEventListener('click', () => {
 buyAutoUpBtn.addEventListener('click', () => {
     if (score >= autoUpgradeCost) {
         score -= autoUpgradeCost;
-        autoProduction += 1; // Increases automatic yield generation base
-        autoUpgradeCost = Math.round(autoUpgradeCost * 1.5); // Scale auto cost
+        autoProduction += 1;
+        autoUpgradeCost = Math.round(autoUpgradeCost * 1.5);
         updateDisplay();
+        saveGame();
     }
 });
 
-// Game Interval Loop Tick Engine (Executes Every Second)
+// ==========================================
+// LOCAL STORAGE SAVING & LOADING SYSTEM
+// ==========================================
+
+function saveGame() {
+    const gameState = {
+        score: score,
+        clickPower: clickPower,
+        autoProduction: autoProduction,
+        clickUpgradeCost: clickUpgradeCost,
+        autoUpgradeCost: autoUpgradeCost
+    };
+    localStorage.setItem('blackholeClickerSave', JSON.stringify(gameState));
+}
+
+function loadGame() {
+    const savedData = localStorage.getItem('blackholeClickerSave');
+    if (savedData) {
+        const gameState = JSON.parse(savedData);
+        score = gameState.score || 0;
+        clickPower = gameState.clickPower || 1;
+        autoProduction = gameState.autoProduction || 0;
+        clickUpgradeCost = gameState.clickUpgradeCost || 15;
+        autoUpgradeCost = gameState.autoUpgradeCost || 50;
+    }
+}
+
+// Settings Action: Hard Reset Game Progress
+hardResetBtn.addEventListener('click', () => {
+    // Show a native confirmation prompt window first
+    const confirmReset = confirm("Are you completely sure you want to collapse reality? This deletes ALL your progress permanently.");
+    
+    if (confirmReset) {
+        localStorage.removeItem('blackholeClickerSave'); // Clear save entry
+        
+        // Restore initial setup numbers
+        score = 0;
+        clickPower = 1;
+        autoProduction = 0;
+        clickUpgradeCost = 15;
+        autoUpgradeCost = 50;
+        
+        // Close menu and update view dashboard layouts
+        settingsMenu.classList.remove('open');
+        updateDisplay();
+    }
+});
+// ==========================================
+
+// Game Interval Loops
 setInterval(() => {
     if (autoProduction > 0) {
         score += autoProduction;
@@ -71,5 +137,10 @@ setInterval(() => {
     }
 }, 1000);
 
-// Initialize view variables upon file execution
+setInterval(() => {
+    saveGame();
+}, 5000);
+
+// Initialize Game Execution
+loadGame();
 updateDisplay();
