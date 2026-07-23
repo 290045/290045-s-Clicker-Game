@@ -81,6 +81,9 @@ body {
     filter: drop-shadow(0 0 25px #a124ff);
     transition: transform 0.1s ease, filter 0.1s ease;
     animation: spin 40s linear infinite;
+    
+    /* Blends the black box away, keeping your glowing black hole visible */
+    mix-blend-mode: screen; 
 }
 #click-btn:hover {
     filter: drop-shadow(0 0 40px #b54fff);
