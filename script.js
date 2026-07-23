@@ -7,6 +7,9 @@ let autoProduction = 0;
 let clickUpgradeCost = 15;
 let autoUpgradeCost = 50;
 
+// Track redeemed codes so they can't be used twice
+let usedCodes = [];
+
 // DOM Interface Elements
 const scoreDisplay = document.getElementById('score');
 const ppsDisplay = document.getElementById('pps-display');
@@ -25,26 +28,31 @@ const settingsToggleBtn = document.getElementById('settings-toggle-btn');
 const settingsCloseBtn = document.getElementById('settings-close-btn');
 const hardResetBtn = document.getElementById('hard-reset-btn');
 
-// Toggle Function: Controls Shop Visibility States Safely
+// NEW: Promo Code DOM Components
+const promoCodeInput = document.getElementById('promo-code-input');
+const promoCodeBtn = document.getElementById('promo-code-btn');
+const codeMessage = document.getElementById('code-message');
+
+// Toggle Function Panels
 shopToggleBtn.addEventListener('click', () => {
-    // If shop is already open, clicking again hides it cleanly
     if (shopMenu.classList.contains('open')) {
         shopMenu.classList.remove('open');
     } else {
         shopMenu.classList.add('open');
-        settingsMenu.classList.remove('open'); // Auto hides open settings menu panel
+        settingsMenu.classList.remove('open');
     }
 });
 shopCloseBtn.addEventListener('click', () => shopMenu.classList.remove('open'));
 
-// Toggle Function: Controls Settings Visibility States Safely
 settingsToggleBtn.addEventListener('click', () => {
-    // If settings is already open, clicking again hides it cleanly
     if (settingsMenu.classList.contains('open')) {
         settingsMenu.classList.remove('open');
     } else {
         settingsMenu.classList.add('open');
-        shopMenu.classList.remove('open'); // Auto hides open shop menu panel
+        shopMenu.classList.remove('open');
+        // Clear old code alerts when opening settings
+        codeMessage.innerText = "";
+        promoCodeInput.value = "";
     }
 });
 settingsCloseBtn.addEventListener('click', () => settingsMenu.classList.remove('open'));
@@ -54,11 +62,9 @@ function updateDisplay() {
     scoreDisplay.innerText = Math.floor(score);
     ppsDisplay.innerText = `${autoProduction} per second`;
     
-    // Manage click upgrade visibility states
     buyClickUpBtn.disabled = score < clickUpgradeCost;
     buyClickUpBtn.innerHTML = `Quantum Tap (+1/click)<br><span class="cost">Cost: ${clickUpgradeCost}</span>`;
     
-    // Manage auto upgrade visibility states
     buyAutoUpBtn.disabled = score < autoUpgradeCost;
     buyAutoUpBtn.innerHTML = `Mini Singularity (+1/sec)<br><span class="cost">Cost: ${autoUpgradeCost}</span>`;
 }
@@ -69,7 +75,7 @@ clickBtn.addEventListener('click', () => {
     updateDisplay();
 });
 
-// Shop Action: Purchase Better Manual Clicks
+// Shop Actions
 buyClickUpBtn.addEventListener('click', () => {
     if (score >= clickUpgradeCost) {
         score -= clickUpgradeCost;
@@ -80,7 +86,6 @@ buyClickUpBtn.addEventListener('click', () => {
     }
 });
 
-// Shop Action: Purchase Better Auto-Clickers
 buyAutoUpBtn.addEventListener('click', () => {
     if (score >= autoUpgradeCost) {
         score -= autoUpgradeCost;
@@ -92,16 +97,62 @@ buyAutoUpBtn.addEventListener('click', () => {
 });
 
 // ==========================================
-// LOCAL STORAGE SAVING & LOADING SYSTEM
+// PROMO CODE LOGIC HOOKS
+// ==========================================
+promoCodeBtn.addEventListener('click', () => {
+    const enteredCode = promoCodeInput.value.trim().toUpperCase();
+    
+    if (enteredCode === "") return;
+
+    // Check if code has already been redeemed
+    if (usedCodes.includes(enteredCode)) {
+        codeMessage.style.color = "#ef4444"; // Red text
+        codeMessage.innerText = "CODE ALREADY REDEEMED!";
+        return;
+    }
+
+    // LIST OF ACTIVE CODES: Add or change secret phrases here!
+    if (enteredCode === "NEBULA") {
+        score += 500; // Gives 500 dark matter
+        successfulRedeem(enteredCode, "Gained 500 Dark Matter!");
+    } 
+    else if (enteredCode === "VOID") {
+        score += 5000; // Gives 5000 dark matter
+        successfulRedeem(enteredCode, "Gained 5,000 Dark Matter!");
+    }
+    else if (enteredCode === "CHEATER") {
+        clickPower += 10; // Instantly gives massive click strength
+        successfulRedeem(enteredCode, "Quantum Tap boosted +10!");
+    }
+    else {
+        codeMessage.style.color = "#ef4444";
+        codeMessage.innerText = "INVALID QUANTUM CODE!";
+    }
+    
+    promoCodeInput.value = ""; // Clear input field box after submit
+});
+
+function successfulRedeem(code, successText) {
+    usedCodes.push(code); // Lock code out from future use
+    codeMessage.style.color = "#00ffcc"; // Neon cyan success text
+    codeMessage.innerText = `SUCCESS: ${successText}`;
+    updateDisplay();
+    saveGame();
+}
 // ==========================================
 
+
+// ==========================================
+// LOCAL STORAGE SAVING & LOADING SYSTEM
+// ==========================================
 function saveGame() {
     const gameState = {
         score: score,
         clickPower: clickPower,
         autoProduction: autoProduction,
         clickUpgradeCost: clickUpgradeCost,
-        autoUpgradeCost: autoUpgradeCost
+        autoUpgradeCost: autoUpgradeCost,
+        usedCodes: usedCodes // Saves your code history safely
     };
     localStorage.setItem('blackholeClickerSave', JSON.stringify(gameState));
 }
@@ -115,10 +166,10 @@ function loadGame() {
         autoProduction = gameState.autoProduction || 0;
         clickUpgradeCost = gameState.clickUpgradeCost || 15;
         autoUpgradeCost = gameState.autoUpgradeCost || 50;
+        usedCodes = gameState.usedCodes || []; // Restores your code history on boot
     }
 }
 
-// Settings Action: Hard Reset Game Progress
 hardResetBtn.addEventListener('click', () => {
     const confirmReset = confirm("Are you completely sure you want to collapse reality? This deletes ALL your progress permanently.");
     
@@ -130,6 +181,7 @@ hardResetBtn.addEventListener('click', () => {
         autoProduction = 0;
         clickUpgradeCost = 15;
         autoUpgradeCost = 50;
+        usedCodes = []; // Wipes used codes list so they can be tested again
         
         settingsMenu.classList.remove('open');
         updateDisplay();
