@@ -89,13 +89,16 @@ body {
 #click-btn {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover; /* Forces the graphic to map cleanly to circular bounds */
     cursor: pointer;
     filter: drop-shadow(0 0 25px #a124ff);
     transition: transform 0.1s ease, filter 0.1s ease;
     animation: spin 40s linear infinite;
     
-    /* REMOVES THE BLACK BOX BACKGROUND: Drops off-black away and lights up neon colors */
+    /* CUTS AWAY RECTANGULAR CORNERS: Changes the sharp image asset outline to a perfect circle */
+    border-radius: 50%; 
+    
+    /* Blends dark tones into background stars while lifting bright accretion disks */
     mix-blend-mode: color-dodge; 
 }
 #click-btn:hover {
