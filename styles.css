@@ -1,52 +1,189 @@
+/* Base Layout & Reset */
+* {
+    box-sizing: border-box;
+}
 body {
-    background-color: #020208; /* Deep cosmic void background */
-    color: #a124ff; /* Event horizon purple/neon violet text */
+    background-color: #020208;
+    color: #a124ff;
     font-family: 'Courier New', Courier, monospace;
+    margin: 0;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0;
     overflow: hidden;
-}
-.game-container {
-    text-align: center;
-    background: rgba(10, 5, 20, 0.6);
-    padding: 40px;
-    border-radius: 20px;
-    border: 1px solid #a124ff;
-    box-shadow: 0 0 30px rgba(161, 36, 255, 0.2);
-}
-#black-hole-wrapper {
-    margin: 30px 0;
-    display: inline-block;
     position: relative;
 }
+
+/* Animated Space Background */
+.space-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 200%;
+    background-image: 
+        radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+        radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
+        radial-gradient(#20003b, transparent 60%);
+    background-size: 550px 550px, 350px 350px, 600px 600px;
+    background-position: 0 0, 40px 60px, 130px 270px;
+    animation: spaceMove 60s linear infinite;
+    z-index: -1;
+    opacity: 0.7;
+}
+@keyframes spaceMove {
+    from { transform: translate(0, 0); }
+    to { transform: translate(-50%, -50%); }
+}
+
+/* Centered Main Game Layout */
+.game-container {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none; /* Allows clicks to bypass container to targets */
+}
+.counter-box {
+    background: rgba(10, 5, 20, 0.75);
+    padding: 20px 40px;
+    border-radius: 15px;
+    border: 1px solid #a124ff;
+    box-shadow: 0 0 30px rgba(161, 36, 255, 0.3);
+    margin-bottom: 40px;
+    pointer-events: auto;
+}
+.counter-box h1 {
+    font-size: 3.5rem;
+    margin: 10px 0;
+    color: #00ffcc;
+    text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+}
+.label { font-size: 0.9rem; letter-spacing: 3px; color: #a124ff; }
+.sub-label { font-size: 0.8rem; color: #888; }
+
+/* Image Clicker Settings */
+#click-btn-container {
+    width: 280px;
+    height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+}
 #click-btn {
-    font-size: 110px;
-    background: none;
-    border: none;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
     cursor: pointer;
-    transition: transform 0.2s;
-    filter: drop-shadow(0 0 15px #a124ff); /* Gives the black hole a purple glow */
+    filter: drop-shadow(0 0 25px #a124ff);
+    transition: transform 0.1s ease, filter 0.1s ease;
+    animation: spin 40s linear infinite;
+}
+#click-btn:hover {
+    filter: drop-shadow(0 0 40px #b54fff);
 }
 #click-btn:active {
-    transform: scale(0.85); /* Black hole collapses inward slightly when clicked */
+    transform: scale(0.88);
 }
-button#buy-auto {
+@keyframes spin {
+    100% { transform: rotate(360deg); }
+}
+
+/* Top Right Shop Toggle Button */
+.shop-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
     background: #a124ff;
     color: #020208;
     border: none;
     padding: 12px 24px;
+    font-size: 1rem;
     font-weight: bold;
+    font-family: inherit;
     border-radius: 8px;
     cursor: pointer;
-    box-shadow: 0 0 10px rgba(161, 36, 255, 0.4);
-    font-family: inherit;
+    box-shadow: 0 0 15px rgba(161, 36, 255, 0.4);
+    z-index: 10;
+    transition: background 0.2s;
 }
-button:disabled {
-    background-color: #1a1525 !important;
-    color: #555 !important;
-    box-shadow: none !important;
+.shop-toggle:hover { background: #b54fff; }
+
+/* Slide-out Menu Panel */
+.shop-menu {
+    position: absolute;
+    top: 0;
+    right: -350px; /* Hidden off-screen right side by default */
+    width: 320px;
+    height: 100vh;
+    background: rgba(10, 5, 25, 0.95);
+    border-left: 2px solid #a124ff;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.7);
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    z-index: 20;
+    transition: right 0.4s cubic-bezier(0.1, 0.9, 0.2, 1);
+}
+.shop-menu.open {
+    right: 0; /* Slides into view when class is active */
+}
+.shop-close {
+    background: none;
+    border: none;
+    color: #ef4444;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 1rem;
+    align-self: flex-end;
+}
+.shop-menu h2 {
+    color: #00ffcc;
+    border-bottom: 1px solid #a124ff;
+    padding-bottom: 10px;
+    margin-top: 10px;
+}
+.shop-section {
+    margin-bottom: 25px;
+}
+.shop-section h3 {
+    font-size: 0.9rem;
+    color: #888;
+    margin-bottom: 10px;
+}
+
+/* Inside Shop Action Buttons */
+.shop-btn {
+    width: 100%;
+    background: transparent;
+    border: 1px solid #a124ff;
+    color: #a124ff;
+    padding: 12px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+}
+.shop-btn:hover:not(:disabled) {
+    background: rgba(161, 36, 255, 0.15);
+    color: #00ffcc;
+    border-color: #00ffcc;
+}
+.shop-btn .cost {
+    display: block;
+    font-size: 0.8rem;
+    color: #00ffcc;
+    margin-top: 4px;
+}
+.shop-btn:disabled {
+    border-color: #333;
+    color: #555;
     cursor: not-allowed;
 }
+.shop-btn:disabled .cost { color: #555; }
