@@ -64,14 +64,17 @@ body {
 .label { font-size: 0.9rem; letter-spacing: 3px; color: #a124ff; }
 .sub-label { font-size: 0.8rem; color: #888; }
 
-/* Image Clicker Settings */
+/* Image Clicker Settings (LOCKS DOWN POSITION AND BLENDS OUT THE BLACK BOX BACKGROUND) */
 #click-btn-container {
     width: 280px;
     height: 280px;
+    min-height: 280px; /* Reserves the exact image size on refresh so it never collapses up */
     display: flex;
     align-items: center;
     justify-content: center;
     pointer-events: auto;
+    margin-top: auto;    /* Pushes layout elements away from edges evenly */
+    margin-bottom: auto; /* Vertically locks down the center of the viewport */
 }
 #click-btn {
     width: 100%;
@@ -82,7 +85,7 @@ body {
     transition: transform 0.1s ease, filter 0.1s ease;
     animation: spin 40s linear infinite;
     
-    /* Blends the black box away, keeping your glowing black hole visible */
+    /* REMOVES THE BLACK BOX BACKGROUND: Keeps glowing parts visible and drops pure black away */
     mix-blend-mode: screen; 
 }
 #click-btn:hover {
