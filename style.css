@@ -79,7 +79,7 @@ body {
 /* Image Clicker Settings */
 #click-btn-container {
     width: 280px;
-    height: 280px;
+    height: 350px;
     min-height: 280px;
     display: flex;
     align-items: center;
