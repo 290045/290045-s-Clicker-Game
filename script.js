@@ -70,9 +70,7 @@ function checkEngineVersionPatch() {
             <div style="border:2px solid #a124ff; padding:30px; border-radius:12px; background:#0b061a; max-width:450px; width:90%; box-shadow:0 0 30px rgba(161,36,255,0.5); text-align:center; pointer-events:auto;">
                 <h2 style="color:#a124ff; margin-top:0;">🚀 SYSTEM PATCH v${CURRENT_VERSION}</h2>
                 <div style="text-align:left; color:#fff; line-height:1.6; margin:20px 0; font-size:0.9rem;">
-                    • <b>Image-Free:</b> Core replaced with a pure CSS Singularity Anomaly.<br>
-                    • <b>Floating Numbers:</b> Manual clicks now spawn real-time particle text.<br>
-                    • <b>Smooth Tick Engine:</b> Upgraded loop structure tracking CPS seamlessly.
+                    • <b>Release!:</b> Very tuff ah clicker game with many things to do. More coming soon...<br>
                 </div>
                 <button id="close-patch-btn" style="background:#00ffcc; color:#000; border:none; padding:10px 25px; border-radius:6px; cursor:pointer; font-weight:bold; font-family:inherit;">SYNC DATAFEED</button>
             </div>
@@ -175,9 +173,9 @@ promoCodeBtn.addEventListener('click', () => {
         score += 500; 
         successfulRedeem(enteredCode, "Gained 500 Dark Matter!");
     } 
-    else if (enteredCode === "SECRET") {
-        clickPower += 10; 
-        successfulRedeem(enteredCode, "Quantum Tap boosted +10!");
+    //else if (enteredCode === "code_here") {
+        //clickPower/score += #; 
+        //successfulRedeem(enteredCode, "Description of what it gives");
     }
     else {
         codeMessage.style.color = "#ef4444";
