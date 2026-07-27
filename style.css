@@ -76,41 +76,95 @@ body {
 .label { font-size: 0.9rem; letter-spacing: 3px; color: #a124ff; }
 .sub-label { font-size: 0.8rem; color: #888; }
 
-/* Image Clicker Settings */
+/* Pure CSS Clicker Mechanical Layout Settings */
 #click-btn-container {
     width: 280px;
-    height: 350px;
+    height: 280px;
     min-height: 280px;
     display: flex;
     align-items: center;
     justify-content: center;
     pointer-events: auto;
-    transition: transform 0.05s ease; /* Smooth scaling animation anchor */
+    transition: transform 0.05s ease;
 }
 
-/* FIXED: Applies the shrink effect to the container box so the image inside never hitches */
+/* Smooth pop effect scales container without breaking inner image matrix rotation angles */
 #click-btn-container:active {
     transform: scale(0.92);
 }
 
-#click-btn {
-    width: 100%;
-    height: 100%;
-    object-fit: contain; /* FIXED: Prevents background dimensions or edges from clipping out */
+/* Central Anomaly Base Ring Vector Anchor */
+.css-black-hole {
+    position: relative;
+    width: 220px;
+    height: 220px;
     cursor: pointer;
-    filter: drop-shadow(0 0 25px #a124ff);
-    transition: filter 0.1s ease;
-    animation: spin 40s linear infinite;
-    border-radius: 50%; 
-    mix-blend-mode: color-dodge; 
-    user-select: none; /* Prevents selection highlighting bugs during rapid tap streaks */
-}
-#click-btn:hover {
-    filter: drop-shadow(0 0 40px #b54fff);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
 }
 
-@keyframes spin {
-    100% { transform: rotate(360deg); }
+/* 1. Pure Void Center (The Singularity) */
+.singularity-core {
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    background: #020208; /* Blends flawlessly into empty structural background */
+    border-radius: 50%;
+    z-index: 5;
+    box-shadow: 
+        inset 0 0 20px rgba(0, 0, 0, 1),
+        0 0 30px rgba(161, 36, 255, 0.8); /* Cosmic glowing purple core envelope */
+}
+
+/* 2. Swirling High-Velocity Accretion Disk Ring */
+.accretion-disk {
+    position: absolute;
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    z-index: 3;
+    background: conic-gradient(
+        from 0deg,
+        #a124ff 0%,
+        #00ffcc 25%,
+        #b54fff 50%,
+        #00ffcc 75%,
+        #a124ff 100%
+    );
+    filter: blur(4px);
+    animation: cosmicSpin 15s linear infinite;
+}
+
+/* 3. Outer Background Gravitational Lensing */
+.gravitational-lens {
+    position: absolute;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    z-index: 1;
+    background: radial-gradient(circle, rgba(161, 36, 255, 0.4) 0%, transparent 70%);
+    filter: blur(12px);
+    animation: pulseGlow 4s ease-in-out infinite alternate;
+}
+
+/* CSS Keyframe Engines */
+@keyframes cosmicSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes pulseGlow {
+    from {
+        transform: scale(0.95);
+        opacity: 0.6;
+    }
+    to {
+        transform: scale(1.08);
+        opacity: 0.95;
+    }
 }
 
 /* Top UI Toggle Control Buttons */
