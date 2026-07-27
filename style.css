@@ -85,24 +85,30 @@ body {
     align-items: center;
     justify-content: center;
     pointer-events: auto;
+    transition: transform 0.05s ease; /* Smooth scaling animation anchor */
 }
+
+/* FIXED: Applies the shrink effect to the container box so the image inside never hitches */
+#click-btn-container:active {
+    transform: scale(0.92);
+}
+
 #click-btn {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain; /* FIXED: Prevents background dimensions or edges from clipping out */
     cursor: pointer;
     filter: drop-shadow(0 0 25px #a124ff);
-    transition: transform 0.1s ease, filter 0.1s ease;
+    transition: filter 0.1s ease;
     animation: spin 40s linear infinite;
     border-radius: 50%; 
     mix-blend-mode: color-dodge; 
+    user-select: none; /* Prevents selection highlighting bugs during rapid tap streaks */
 }
 #click-btn:hover {
     filter: drop-shadow(0 0 40px #b54fff);
 }
-#click-btn:active {
-    transform: scale(0.88);
-}
+
 @keyframes spin {
     100% { transform: rotate(360deg); }
 }
@@ -206,7 +212,7 @@ body {
 .shop-btn:disabled { border-color: #333; color: #555; cursor: not-allowed; }
 .shop-btn:disabled .cost { color: #555; }
 
-/* NEW: Promo Code Box Styling Layouts */
+/* Promo Code Box Styling Layouts */
 .code-input-container {
     display: flex;
     gap: 8px;
@@ -222,7 +228,7 @@ body {
     font-family: inherit;
     font-size: 0.85rem;
     outline: none;
-    text-transform: uppercase; /* Automatically forces typed codes into uppercase */
+    text-transform: uppercase;
 }
 #promo-code-input:focus {
     border-color: #00ffcc;
