@@ -1,83 +1,35 @@
-/* General Reset */
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: black;
-  color: white;
-  overflow-x: hidden;
-}
-
-/* Space Background */
-.space-bg {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at center, #000 60%, #111);
-  z-index: -1;
-}
-
-/* Counter Box */
-.counter-box {
-  text-align: center;
-  margin-top: 50px;
-}
-.counter-box .label {
-  font-size: 1rem;
-  color: #aaa;
-}
-.counter-box h1 {
-  font-size: 3rem;
-  margin: 10px 0;
-}
-.counter-box .sub-label {
-  font-size: 0.9rem;
-  color: #888;
-}
-
-/* Black Hole Click Button */
 .css-black-hole {
-  width: 150px;
-  height: 150px;
+  width: 200px;
+  height: 200px;
   margin: 50px auto;
   border-radius: 50%;
-  background: radial-gradient(circle, #000, #333);
-  cursor: pointer;
+  background: radial-gradient(circle, #000 40%, #111 70%, #222 100%);
   position: relative;
-  box-shadow: 0 0 30px rgba(161, 36, 255, 0.6);
-  transition: transform 0.2s ease;
+  cursor: pointer;
+  box-shadow: 0 0 60px rgba(161, 36, 255, 0.8);
 }
-.css-black-hole:hover {
-  transform: scale(1.05);
-}
-.singularity-core {
-  position: absolute;
-  width: 40px;
-  height: 40px;
-  background: #111;
-  border-radius: 50%;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-.accretion-disk {
+
+.css-black-hole .accretion-disk {
   position: absolute;
   width: 100%;
   height: 100%;
-  border: 3px solid #a124ff;
+  border: 4px solid #a124ff;
   border-radius: 50%;
   animation: spin 6s linear infinite;
 }
-.gravitational-lens {
+
+.css-black-hole .gravitational-lens {
   position: absolute;
-  width: 120%;
-  height: 120%;
+  width: 140%;
+  height: 140%;
   border: 2px dashed #00ffcc;
   border-radius: 50%;
-  top: -10%;
-  left: -10%;
+  top: -20%;
+  left: -20%;
   animation: spin 12s linear infinite reverse;
 }
-.cinematic-disk-warp {
+
+.css-black-hole .cinematic-disk-warp {
   position: absolute;
   width: 80%;
   height: 80%;
@@ -95,78 +47,4 @@ body {
 @keyframes pulse {
   0%, 100% { transform: scale(1); opacity: 0.5; }
   50% { transform: scale(1.1); opacity: 1; }
-}
-
-/* Menus */
-.settings-menu,
-.shop-menu {
-  display: none;
-  position: fixed;
-  top: 0;
-  width: 300px;
-  height: 100%;
-  background: #222;
-  padding: 20px;
-  overflow-y: auto;
-  z-index: 1000;
-}
-.settings-menu.open,
-.shop-menu.open {
-  display: block;
-}
-.settings-menu {
-  left: 0;
-}
-.shop-menu {
-  right: 0;
-}
-
-/* Buttons */
-.settings-toggle,
-.shop-toggle {
-  position: fixed;
-  top: 10px;
-  padding: 10px;
-  cursor: pointer;
-  background: #333;
-  border: none;
-  color: #fff;
-  border-radius: 6px;
-  font-weight: bold;
-}
-.settings-toggle {
-  left: 10px;
-}
-.shop-toggle {
-  right: 10px;
-}
-.shop-btn {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 12px;
-  background: #444;
-  border: none;
-  color: #fff;
-  border-radius: 6px;
-  cursor: pointer;
-  text-align: left;
-}
-.shop-btn:disabled {
-  background: #222;
-  color: #666;
-  cursor: not-allowed;
-}
-
-/* Promo Code Message */
-.code-msg {
-  margin-top: 10px;
-  font-size: 0.9rem;
-  color: #00ffcc;
-}
-
-/* Reset Warning */
-.settings-warn {
-  font-size: 0.8rem;
-  color: #ff4444;
 }
