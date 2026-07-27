@@ -1,3 +1,6 @@
+// Current Application Engine Patch Configuration
+const CURRENT_VERSION = "1.1.0";
+
 // Game State Core Variables
 let score = 0;
 let clickPower = 1;
@@ -10,10 +13,21 @@ let autoUpgradeCost = 50;
 // Track redeemed codes so they can't be used twice
 let usedCodes = [];
 
+// NEW: MULTI-LAYER PRESTIGE INFRASTRUCTURE
+let rebirths = 0;
+let rebirthRequirement = 10000; // Base requirement for 1st Rebirth
+
+let ascensions = 0;
+let ascensionRequirement = 10; // Requires 10 Rebirths
+
+let prestiges = 0;
+let prestigeRequirement = 5; // Requires 5 Ascensions
+
 // DOM Interface Elements
 const scoreDisplay = document.getElementById('score');
 const ppsDisplay = document.getElementById('pps-display');
 const clickBtn = document.getElementById('click-btn');
+const clickBtnContainer = document.getElementById('click-btn-container');
 
 // Shop UI Interface Components
 const shopMenu = document.getElementById('shop-menu');
@@ -28,7 +42,7 @@ const settingsToggleBtn = document.getElementById('settings-toggle-btn');
 const settingsCloseBtn = document.getElementById('settings-close-btn');
 const hardResetBtn = document.getElementById('hard-reset-btn');
 
-// NEW: Promo Code DOM Components
+// Promo Code DOM Components
 const promoCodeInput = document.getElementById('promo-code-input');
 const promoCodeBtn = document.getElementById('promo-code-btn');
 const codeMessage = document.getElementById('code-message');
@@ -50,28 +64,116 @@ settingsToggleBtn.addEventListener('click', () => {
     } else {
         settingsMenu.classList.add('open');
         shopMenu.classList.remove('open');
-        // Clear old code alerts when opening settings
         codeMessage.innerText = "";
         promoCodeInput.value = "";
     }
 });
 settingsCloseBtn.addEventListener('click', () => settingsMenu.classList.remove('open'));
 
+// ==========================================
+// NEW: DYNAMIC VERSION NOTIFICATION MODAL
+// ==========================================
+function checkEngineVersionPatch() {
+    const savedPatch = localStorage.getItem('blackholeClickerVersion');
+    if (savedPatch !== CURRENT_VERSION) {
+        // Create full overlay background container block cleanly via JS
+        const patchOverlay = document.createElement('div');
+        patchOverlay.style = "position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(5,2,15,0.95); z-index:9999; display:flex; justify-content:center; align-items:center; font-family:monospace; color:#00ffcc;";
+        
+        // Assembles a styled text card layout directly over the canvas core
+        patchOverlay.innerHTML = `
+            <div style="border:2px solid #a124ff; padding:30px; border-radius:12px; background:#0b061a; max-width:450px; width:90%; box-shadow:0 0 30px rgba(161,36,255,0.5); text-align:center;">
+                <h2 style="color:#a124ff; margin-top:0;">🚀 SYSTEM PATCH v${CURRENT_VERSION}</h2>
+                <div style="text-align:left; color:#fff; line-height:1.6; margin:20px 0; font-size:0.9rem;">
+                    • <b>Image-Free:</b> Core replaced with a pure CSS Singularity Anomaly.<br>
+                    • <b>Floating Numbers:</b> Manual clicks now spawn real-time particle text.<br>
+                    • <b>Smooth Tick Engine:</b> Upgraded loop structure directly tracking CPS changes.<br>
+                    • <b>Prestige Layers:</b> Added Rebirths, Ascensions, and Reality Prestiges!
+                </div>
+                <button id="close-patch-btn" style="background:#00ffcc; color:#000; border:none; padding:10px 25px; border-radius:6px; cursor:pointer; font-weight:bold; font-family:inherit;">SYNC DATAFEED</button>
+            </div>
+        `;
+        document.body.appendChild(patchOverlay);
+        
+        document.getElementById('close-patch-btn').addEventListener('click', () => {
+            document.body.removeChild(patchOverlay);
+            localStorage.setItem('blackholeClickerVersion', CURRENT_VERSION);
+        });
+    }
+}
+
+// ==========================================
+// NEW: FLOATING RISING TEXT ALGORITHM
+// ==========================================
+function spawnFloatingText(event, displayText) {
+    const textNode = document.createElement('span');
+    textNode.innerText = displayText;
+    
+    // Exact structural coordinates based on mouse cursor intersection
+    const clickX = event.clientX;
+    const clickY = event.clientY;
+    
+    textNode.style.position = 'fixed';
+    textNode.style.left = `${clickX}px`;
+    textNode.style.top = `${clickY}px`;
+    textNode.style.color = '#00ffcc';
+    textNode.style.fontWeight = 'bold';
+    textNode.style.fontSize = '1.3rem';
+    textNode.style.pointerEvents = 'none';
+    textNode.style.zIndex = '999';
+    textNode.style.textShadow = '0 0 8px rgba(0, 255, 204, 0.8)';
+    textNode.style.transition = 'transform 0.8s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 0.8s ease';
+    
+    document.body.appendChild(textNode);
+    
+    // Micro-delay loop allows browser to parse physics transform frames accurately
+    requestAnimationFrame(() => {
+        textNode.style.transform = 'translate(-50%, -60px)';
+        textNode.style.opacity = '0';
+    });
+    
+    // Purges node from document tree to eliminate browser lag entirely
+    setTimeout(() => {
+        if (textNode.parentNode) {
+            document.body.removeChild(textNode);
+        }
+    }, 800);
+}
+
+// Calculates dynamic multipliers based on current prestige standings
+function getPrestigeMultiplier() {
+    let multiplier = 1;
+    multiplier += rebirths * 0.15; // +15% boost per Rebirth
+    multiplier *= Math.pow(2, ascensions); // Double production per Ascension
+    multiplier *= Math.pow(5, prestiges); // 5x production per Reality Prestige
+    return multiplier;
+}
+
 // Main Refresh Engine
 function updateDisplay() {
-    scoreDisplay.innerText = Math.floor(score);
-    ppsDisplay.innerText = `${autoProduction} per second`;
+    const activeMultiplier = getPrestigeMultiplier();
+    const activeCPS = autoProduction * activeMultiplier;
+    
+    scoreDisplay.innerText = Math.floor(score).toLocaleString();
+    ppsDisplay.innerText = `${activeCPS.toFixed(1)} per second`;
     
     buyClickUpBtn.disabled = score < clickUpgradeCost;
-    buyClickUpBtn.innerHTML = `Quantum Tap (+1/click)<br><span class="cost">Cost: ${clickUpgradeCost}</span>`;
+    buyClickUpBtn.innerHTML = `Quantum Tap (+1/click)<br><span class="cost">Cost: ${clickUpgradeCost.toLocaleString()}</span>`;
     
     buyAutoUpBtn.disabled = score < autoUpgradeCost;
-    buyAutoUpBtn.innerHTML = `Mini Singularity (+1/sec)<br><span class="cost">Cost: ${autoUpgradeCost}</span>`;
+    buyAutoUpBtn.innerHTML = `Mini Singularity (+1/sec)<br><span class="cost">Cost: ${autoUpgradeCost.toLocaleString()}</span>`;
+    
+    // Dynamically injects or updates prestige panels inside the sidebar menus
+    refreshPrestigeUI();
 }
 
 // Interactive Manual Clicking Action
-clickBtn.addEventListener('click', () => {
-    score += clickPower;
+clickBtn.addEventListener('click', (e) => {
+    const activeMultiplier = getPrestigeMultiplier();
+    const finalClickValue = clickPower * activeMultiplier;
+    
+    score += finalClickValue;
+    spawnFloatingText(e, `+${Math.floor(finalClickValue)}`);
     updateDisplay();
 });
 
@@ -97,106 +199,32 @@ buyAutoUpBtn.addEventListener('click', () => {
 });
 
 // ==========================================
-// PROMO CODE LOGIC HOOKS
+// NEW: DYNAMIC PRESTIGE ENGINE HOOKS
 // ==========================================
-promoCodeBtn.addEventListener('click', () => {
-    const enteredCode = promoCodeInput.value.trim().toUpperCase();
-    
-    if (enteredCode === "") return;
-
-    // Check if code has already been redeemed
-    if (usedCodes.includes(enteredCode)) {
-        codeMessage.style.color = "#ef4444"; // Red text
-        codeMessage.innerText = "CODE ALREADY REDEEMED!";
-        return;
-    }
-
-    // LIST OF ACTIVE CODES: Add or change secret phrases here!
-    if (enteredCode === "RELEASE!") {
-        score += 500; // Gives 500 dark matter
-        successfulRedeem(enteredCode, "Gained 500 Dark Matter!");
-    } 
-    else if (enteredCode === "SECRET") {
-        clickPower += 10; // Instantly gives massive click strength
-        successfulRedeem(enteredCode, "Quantum Tap boosted +10!");
-    }
-    else {
-        codeMessage.style.color = "#ef4444";
-        codeMessage.innerText = "INVALID QUANTUM CODE!";
+function refreshPrestigeUI() {
+    // Ensures a dedicated prestige section area container exists inside the shop menu drawer
+    let prestigeWrapper = document.getElementById('prestige-shop-section');
+    if (!prestigeWrapper) {
+        prestigeWrapper = document.createElement('div');
+        prestigeWrapper.id = 'prestige-shop-section';
+        prestigeWrapper.className = 'shop-section';
+        shopMenu.appendChild(prestigeWrapper);
     }
     
-    promoCodeInput.value = ""; // Clear input field box after submit
-});
-
-function successfulRedeem(code, successText) {
-    usedCodes.push(code); // Lock code out from future use
-    codeMessage.style.color = "#00ffcc"; // Neon cyan success text
-    codeMessage.innerText = `SUCCESS: ${successText}`;
-    updateDisplay();
-    saveGame();
-}
-// ==========================================
-
-
-// ==========================================
-// LOCAL STORAGE SAVING & LOADING SYSTEM
-// ==========================================
-function saveGame() {
-    const gameState = {
-        score: score,
-        clickPower: clickPower,
-        autoProduction: autoProduction,
-        clickUpgradeCost: clickUpgradeCost,
-        autoUpgradeCost: autoUpgradeCost,
-        usedCodes: usedCodes // Saves your code history safely
-    };
-    localStorage.setItem('blackholeClickerSave', JSON.stringify(gameState));
-}
-
-function loadGame() {
-    const savedData = localStorage.getItem('blackholeClickerSave');
-    if (savedData) {
-        const gameState = JSON.parse(savedData);
-        score = gameState.score || 0;
-        clickPower = gameState.clickPower || 1;
-        autoProduction = gameState.autoProduction || 0;
-        clickUpgradeCost = gameState.clickUpgradeCost || 15;
-        autoUpgradeCost = gameState.autoUpgradeCost || 50;
-        usedCodes = gameState.usedCodes || []; // Restores your code history on boot
-    }
-}
-
-hardResetBtn.addEventListener('click', () => {
-    const confirmReset = confirm("Are you completely sure you want to collapse reality? This deletes ALL your progress permanently.");
+    // Calculate current milestone scaling metrics
+    rebirthRequirement = Math.round(10000 * Math.pow(2.5, rebirths));
     
-    if (confirmReset) {
-        localStorage.removeItem('blackholeClickerSave');
+    prestigeWrapper.innerHTML = `
+        <h3>Prestige Pathways</h3>
+        <p style="font-size:0.8rem; color:#888; margin:5px 0 12px 0;">Active Multiplier: <b>x${getPrestigeMultiplier().toFixed(2)}</b></p>
         
-        score = 0;
-        clickPower = 1;
-        autoProduction = 0;
-        clickUpgradeCost = 15;
-        autoUpgradeCost = 50;
-        usedCodes = []; // Wipes used codes list so they can be tested again
-        
-        settingsMenu.classList.remove('open');
-        updateDisplay();
-    }
-});
-// ==========================================
+        <button id="rebirth-btn" class="shop-btn" ${score < rebirthRequirement ? 'disabled' : ''} style="margin-bottom:10px;">
+            🌌 Initiate Rebirth (+1)<br><span class="cost">Requires: ${rebirthRequirement.toLocaleString()} Matter</span>
+        </button>
+        <p style="font-size:0.75rem; color:#00ffcc; margin:-5px 0 10px 5px;">Current Rebirths: ${rebirths}</p>
 
-// Game Interval Loops
-setInterval(() => {
-    if (autoProduction > 0) {
-        score += autoProduction;
-        updateDisplay();
-    }
-}, 1000);
+        <button id="ascension-btn" class="shop-btn" ${rebirths < ascensionRequirement ? 'disabled' : ''} style="margin-bottom:10px; border-color:#00ffcc; color:#00ffcc;">
+            🌟 Ascend Reality<br><span class="cost" style="color:#fff;">Requires: ${ascensionRequirement} Rebirths</span>
+        </button>
+        <p style="font-size:0.75rem; color:#b54fff; margin:-5px 0 10px 5px;">Current Ascensions: ${ascensions}</p>
 
-setInterval(() => {
-    saveGame();
-}, 5000);
-
-// Initialize Game Execution
-loadGame();
-updateDisplay();
