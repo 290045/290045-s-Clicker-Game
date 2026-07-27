@@ -2,13 +2,22 @@
 - Update popup
 - More Upgrades
 - Rebirths, ascensions, prestiges
-  - Rebirth/Ascension/Presiges gives boosts and points for upgrades
-- Milestones
+  - Rebirth/Ascension/Presiges gives boosts and points for an upgrade tree
+- Milestones/Achievements
 - Customization
+- Asteroids fly across the screen with a white trail from time to time
+- Popup boosts
+  - 2x click power
+  - 2x CPS
+  - 2x Everything
 
 # Fixes
 - Clicks add towards CPS
-
+- When refresh UI disappears
 
 # QOL
-- Floating text every time user clicks
+- 
+
+
+# Milestones: 
+
