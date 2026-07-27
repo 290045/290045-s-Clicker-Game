@@ -1,29 +1,157 @@
 // Current Application Engine Patch Configuration
-const CURRENT_VERSION = "1.1.0";
+const CURRENT_VERSION = "1.0.0";
 
 // Game State Core Variables
 let score = 0;
 let clickPower = 1;
 let autoProduction = 0;
 
-// Dynamic Scaling Base Costs
-let clickUpgradeCost = 15;
-let autoUpgradeCost = 50;
-
 // Track redeemed codes
 let usedCodes = ["INIT_BLOCK"];
+
+// ==========================================
+// 🌌 THE MASSIVE UPGRADE REGISTRY DATABASE
+// ==========================================
+// Any upgrade you add to this list automatically generates its own shop button!
+let upgrades = [
+    // --- MANUAL CLICK UPGRADES ---
+    {
+        id: "click_1",
+        name: "Quantum Tap",
+        type: "click",
+        baseCost: 15,
+        currentCost: 15,
+        power: 1,
+        count: 0,
+        description: "+1 per click"
+    },
+    {
+        id: "click_2",
+        name: "Subatomic Friction",
+        type: "click",
+        baseCost: 250,
+        currentCost: 250,
+        power: 5,
+        count: 0,
+        description: "+5 per click"
+    },
+    {
+        id: "click_3",
+        name: "Event Horizon Anchor",
+        type: "click",
+        baseCost: 2500,
+        currentCost: 2500,
+        power: 25,
+        count: 0,
+        description: "+25 per click"
+    },
+    {
+        id: "click_4",
+        name: "Wormhole Puncher",
+        type: "click",
+        baseCost: 25000,
+        currentCost: 25000,
+        power: 150,
+        count: 0,
+        description: "+150 per click"
+    },
+    
+    // --- TIER 1 AUTOMATION ---
+    {
+        id: "auto_1",
+        name: "Mini Singularity",
+        type: "auto",
+        baseCost: 50,
+        currentCost: 50,
+        power: 1,
+        count: 0,
+        description: "+1 Dark Matter/sec"
+    },
+    {
+        id: "auto_2",
+        name: "Orbital Dust Vacuum",
+        type: "auto",
+        baseCost: 400,
+        currentCost: 400,
+        power: 5,
+        count: 0,
+        description: "+5 Dark Matter/sec"
+    },
+    {
+        id: "auto_3",
+        name: "Asteroid Driller",
+        type: "auto",
+        baseCost: 3000,
+        currentCost: 3000,
+        power: 25,
+        count: 0,
+        description: "+25 Dark Matter/sec"
+    },
+    {
+        id: "auto_4",
+        name: "Nebula Scoop",
+        type: "auto",
+        baseCost: 18000,
+        currentCost: 18000,
+        power: 120,
+        count: 0,
+        description: "+120 Dark Matter/sec"
+    },
+
+    // --- TIER 2 AUTOMATION ---
+    {
+        id: "auto_5",
+        name: "Moon Cracker",
+        type: "auto",
+        baseCost: 95000,
+        currentCost: 95000,
+        power: 600,
+        count: 0,
+        description: "+600 Dark Matter/sec"
+    },
+    {
+        id: "auto_6",
+        name: "Gas Giant Siphon",
+        type: "auto",
+        baseCost: 550000,
+        currentCost: 550000,
+        power: 3200,
+        count: 0,
+        description: "+3,200 Dark Matter/sec"
+    },
+    {
+        id: "auto_7",
+        name: "Solar Satellite Array",
+        type: "auto",
+        baseCost: 4000000,
+        currentCost: 4000000,
+        power: 18000,
+        count: 0,
+        description: "+18,000 Dark Matter/sec"
+    },
+    {
+        id: "auto_8",
+        name: "Dyson Swarm Fleet",
+        type: "auto",
+        baseCost: 35000000,
+        currentCost: 35000000,
+        power: 110000,
+        count: 0,
+        description: "+110,000 Dark Matter/sec"
+    }
+];
 
 // DOM Interface Elements
 const scoreDisplay = document.getElementById('score');
 const ppsDisplay = document.getElementById('pps-display');
 const clickBtn = document.getElementById('click-btn');
 
-// Shop UI Interface Components
+// Shop UI Target Structural Nodes
 const shopMenu = document.getElementById('shop-menu');
 const shopToggleBtn = document.getElementById('shop-toggle-btn');
 const shopCloseBtn = document.getElementById('shop-close-btn');
-const buyClickUpBtn = document.getElementById('buy-click-up');
-const buyAutoUpBtn = document.getElementById('buy-auto-up');
+const manualContainer = document.getElementById('manual-upgrades-container');
+const automatedContainer = document.getElementById('automated-upgrades-container');
 
 // Settings UI Interface Components
 const settingsMenu = document.getElementById('settings-menu');
@@ -70,7 +198,9 @@ function checkEngineVersionPatch() {
             <div style="border:2px solid #a124ff; padding:30px; border-radius:12px; background:#0b061a; max-width:450px; width:90%; box-shadow:0 0 30px rgba(161,36,255,0.5); text-align:center; pointer-events:auto;">
                 <h2 style="color:#a124ff; margin-top:0;">🚀 SYSTEM PATCH v${CURRENT_VERSION}</h2>
                 <div style="text-align:left; color:#fff; line-height:1.6; margin:20px 0; font-size:0.9rem;">
-                    • <b>Release!:</b> Very tuff ah clicker game with many things to do. More coming soon...<br>
+                    • <b>Massive Expansion:</b> Added 12 brand-new, scaling shop upgrades!<br>
+                    • <b>Automated UI Spawning:</b> Upgrades are built dynamically via JavaScript loops.<br>
+                    • <b>Inventory Tracker:</b> Buttons now display exactly how many modules you own.
                 </div>
                 <button id="close-patch-btn" style="background:#00ffcc; color:#000; border:none; padding:10px 25px; border-radius:6px; cursor:pointer; font-weight:bold; font-family:inherit;">SYNC DATAFEED</button>
             </div>
@@ -95,12 +225,12 @@ function spawnFloatingText(event, displayText) {
     textNode.style.position = 'fixed';
     textNode.style.left = `${clickX}px`;
     textNode.style.top = `${clickY}px`;
-    textNode.style.color = '#00ffcc';
+    textNode.style.color = '#e0aa85';
     textNode.style.fontWeight = 'bold';
     textNode.style.fontSize = '1.3rem';
     textNode.style.pointerEvents = 'none';
     textNode.style.zIndex = '999';
-    textNode.style.textShadow = '0 0 8px rgba(0, 255, 204, 0.8)';
+    textNode.style.textShadow = '0 0 8px rgba(224, 170, 133, 0.8)';
     textNode.style.transition = 'transform 0.8s cubic-bezier(0.1, 0.8, 0.3, 1), opacity 0.8s ease';
     
     document.body.appendChild(textNode);
@@ -117,141 +247,61 @@ function spawnFloatingText(event, displayText) {
     }, 800);
 }
 
+// ==========================================
+// 🛠️ AUTOMATED SHOP RENDERING SYSTEM
+// ==========================================
+function buildShopInterfaceButtons() {
+    manualContainer.innerHTML = "";
+    automatedContainer.innerHTML = "";
+
+    upgrades.forEach((upgrade) => {
+        const btn = document.createElement('button');
+        btn.id = `btn-${upgrade.id}`;
+        btn.className = 'shop-btn';
+        btn.style.marginBottom = '12px';
+        
+        btn.innerHTML = `
+            ${upgrade.name} (${upgrade.count})<br>
+            <small style="color:#888; font-size:0.75rem;">${upgrade.description}</small><br>
+            <span class="cost">Cost: ${Math.floor(upgrade.currentCost).toLocaleString()}</span>
+        `;
+        
+        btn.addEventListener('click', () => buyUpgradeModule(upgrade));
+
+        if (upgrade.type === 'click') {
+            manualContainer.appendChild(btn);
+        } else {
+            automatedContainer.appendChild(btn);
+        }
+    });
+}
+
+function buyUpgradeModule(upgrade) {
+    if (score >= upgrade.currentCost) {
+        score -= upgrade.currentCost;
+        upgrade.count += 1;
+        
+        if (upgrade.type === 'click') {
+            clickPower += upgrade.power;
+        } else {
+            autoProduction += upgrade.power;
+        }
+        
+        upgrade.currentCost = Math.round(upgrade.baseCost * Math.pow(1.5, upgrade.count));
+        
+        updateDisplay();
+        saveGame();
+    }
+}
+// ==========================================
+
 // Main Refresh Engine
 function updateDisplay() {
     scoreDisplay.innerText = Math.floor(score).toLocaleString();
-    ppsDisplay.innerText = `${autoProduction} per second`;
+    ppsDisplay.innerText = `${autoProduction.toLocaleString()} per second`;
     
-    buyClickUpBtn.disabled = score < clickUpgradeCost;
-    buyClickUpBtn.innerHTML = `Quantum Tap (+1/click)<br><span class="cost">Cost: ${clickUpgradeCost.toLocaleString()}</span>`;
-    
-    buyAutoUpBtn.disabled = score < autoUpgradeCost;
-    buyAutoUpBtn.innerHTML = `Mini Singularity (+1/sec)<br><span class="cost">Cost: ${autoUpgradeCost.toLocaleString()}</span>`;
-}
-
-// Interactive Manual Clicking Action
-clickBtn.addEventListener('click', (e) => {
-    score += clickPower;
-    spawnFloatingText(e, `+${clickPower}`);
-    updateDisplay();
-});
-
-// Shop Actions
-buyClickUpBtn.addEventListener('click', () => {
-    if (score >= clickUpgradeCost) {
-        score -= clickUpgradeCost;
-        clickPower += 1;
-        clickUpgradeCost = Math.round(clickUpgradeCost * 1.6);
-        updateDisplay();
-        saveGame();
-    }
-});
-
-buyAutoUpBtn.addEventListener('click', () => {
-    if (score >= autoUpgradeCost) {
-        score -= autoUpgradeCost;
-        autoProduction += 1;
-        autoUpgradeCost = Math.round(autoUpgradeCost * 1.5);
-        updateDisplay();
-        saveGame();
-    }
-});
-
-// PROMO CODE LOGIC HOOKS
-promoCodeBtn.addEventListener('click', () => {
-    const enteredCode = promoCodeInput.value.trim().toUpperCase();
-    
-    if (enteredCode === "") return;
-
-    if (usedCodes.includes(enteredCode)) {
-        codeMessage.style.color = "#ef4444"; 
-        codeMessage.innerText = "CODE ALREADY REDEEMED!";
-        return;
-    }
-
-    if (enteredCode === "RELEASE!") {
-        score += 500; 
-        successfulRedeem(enteredCode, "Gained 500 Dark Matter!");
-    } 
-    //else if (enteredCode === "code_here") {
-        //clickPower/score += #; 
-        //successfulRedeem(enteredCode, "Description of what it gives");
-    }
-    else {
-        codeMessage.style.color = "#ef4444";
-        codeMessage.innerText = "INVALID QUANTUM CODE!";
-    }
-    
-    promoCodeInput.value = ""; 
-});
-
-function successfulRedeem(code, successText) {
-    usedCodes.push(code); 
-    codeMessage.style.color = "#00ffcc"; 
-    codeMessage.innerText = `SUCCESS: ${successText}`;
-    updateDisplay();
-    saveGame();
-}
-
-// LOCAL STORAGE SYSTEM
-function saveGame() {
-    const gameState = {
-        score: score,
-        clickPower: clickPower,
-        autoProduction: autoProduction,
-        clickUpgradeCost: clickUpgradeCost,
-        autoUpgradeCost: autoUpgradeCost,
-        usedCodes: usedCodes
-    };
-    localStorage.setItem('blackholeClickerSave', JSON.stringify(gameState));
-}
-
-function loadGame() {
-    const savedData = localStorage.getItem('blackholeClickerSave');
-    if (savedData) {
-        const gameState = JSON.parse(savedData);
-        score = gameState.score || 0;
-        clickPower = gameState.clickPower || 1;
-        autoProduction = gameState.autoProduction || 0;
-        clickUpgradeCost = gameState.clickUpgradeCost || 15;
-        autoUpgradeCost = gameState.autoUpgradeCost || 50;
-        usedCodes = gameState.usedCodes || ["INIT_BLOCK"];
-    }
-}
-
-hardResetBtn.addEventListener('click', () => {
-    const confirmReset = confirm("Are you completely sure you want to collapse reality? This deletes ALL your progress permanently.");
-    if (confirmReset) {
-        localStorage.removeItem('blackholeClickerSave');
-        localStorage.removeItem('blackholeClickerVersion');
-        
-        score = 0;
-        clickPower = 1;
-        autoProduction = 0;
-        clickUpgradeCost = 15;
-        autoUpgradeCost = 50;
-        usedCodes = ["INIT_BLOCK"];
-        
-        settingsMenu.classList.remove('open');
-        updateDisplay();
-    }
-});
-
-// UPGRADED TICK ENGINE
-// Splitting production into 20 micro-ticks a second makes the counter climb smoothly
-setInterval(() => {
-    if (autoProduction > 0) {
-        score += (autoProduction / 20);
-        updateDisplay();
-    }
-}, 50);
-
-// Save game progress data safely every 5 seconds
-setInterval(() => {
-    saveGame();
-}, 5000);
-
-// Initialize Game Execution
-loadGame();
-checkEngineVersionPatch();
-updateDisplay();
+    upgrades.forEach((upgrade) => {
+        const btn = document.getElementById(`btn-${upgrade.id}`);
+        if (btn) {
+            btn.disabled = score < upgrade.currentCost;
+            btn.innerHTML = `
