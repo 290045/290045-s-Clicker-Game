@@ -1,10 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
     console.log("SCRIPT LOADED ✅");
 
+    // Game state
     let score = 0;
     let clickPower = 1;
     let autoProduction = 0;
 
+    // DOM elements
     const scoreDisplay = document.getElementById("score");
     const ppsDisplay = document.getElementById("pps-display");
     const clickBtn = document.getElementById("click-btn");
@@ -37,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     settingsCloseBtn.addEventListener("click", () => settingsMenu.classList.remove("open"));
 
-    // Click button
+    // Click button (black hole)
     clickBtn.addEventListener("click", (event) => {
         score += clickPower;
         spawnFloatingText(event, `+${clickPower}`);
