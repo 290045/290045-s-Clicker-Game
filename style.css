@@ -7,6 +7,7 @@ body {
     color: #a124ff;
     font-family: 'Courier New', Courier, monospace;
     margin: 0;
+    width: 100vw;
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -76,7 +77,7 @@ body {
 .label { font-size: 0.9rem; letter-spacing: 3px; color: #a124ff; }
 .sub-label { font-size: 0.8rem; color: #888; }
 
-/* Pure CSS Clicker Mechanical Layout Settings */
+/* Pure CSS Clicker Settings */
 #click-btn-container {
     width: 280px;
     height: 280px;
@@ -88,12 +89,10 @@ body {
     transition: transform 0.05s ease;
 }
 
-/* Smooth pop effect scales container without breaking inner image matrix rotation angles */
 #click-btn-container:active {
     transform: scale(0.92);
 }
 
-/* Central Anomaly Base Ring Vector Anchor */
 .css-black-hole {
     position: relative;
     width: 220px;
@@ -106,20 +105,20 @@ body {
     user-select: none;
 }
 
-/* 1. Pure Void Center (The Singularity) */
+/* 1. Pure Void Center */
 .singularity-core {
     position: absolute;
     width: 90px;
     height: 90px;
-    background: #020208; /* Blends flawlessly into empty structural background */
+    background: #020208;
     border-radius: 50%;
     z-index: 5;
     box-shadow: 
         inset 0 0 20px rgba(0, 0, 0, 1),
-        0 0 30px rgba(161, 36, 255, 0.8); /* Cosmic glowing purple core envelope */
+        0 0 30px rgba(161, 36, 255, 0.8);
 }
 
-/* 2. Swirling High-Velocity Accretion Disk Ring */
+/* 2. Accretion Disk */
 .accretion-disk {
     position: absolute;
     width: 170px;
@@ -138,7 +137,7 @@ body {
     animation: cosmicSpin 15s linear infinite;
 }
 
-/* 3. Outer Background Gravitational Lensing */
+/* 3. Outer Lens */
 .gravitational-lens {
     position: absolute;
     width: 220px;
@@ -150,7 +149,6 @@ body {
     animation: pulseGlow 4s ease-in-out infinite alternate;
 }
 
-/* CSS Keyframe Engines */
 @keyframes cosmicSpin {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
@@ -189,7 +187,7 @@ body {
 .shop-toggle:hover, .settings-toggle:hover { background: #b54fff; }
 .shop-toggle:active, .settings-toggle:active { transform: scale(0.95); }
 
-/* Detached Floating Sidebar Overlay Panels */
+/* Sidebar Overlays */
 .shop-menu, .settings-menu {
     position: fixed;
     top: 0;
@@ -266,7 +264,7 @@ body {
 .shop-btn:disabled { border-color: #333; color: #555; cursor: not-allowed; }
 .shop-btn:disabled .cost { color: #555; }
 
-/* Promo Code Box Styling Layouts */
+/* Promo Code Box Styling */
 .code-input-container {
     display: flex;
     gap: 8px;
@@ -311,7 +309,7 @@ body {
     font-weight: bold;
 }
 
-/* Settings Reset Layouts */
+/* Settings Reset */
 .reset-btn {
     background: transparent;
     border: 1px solid #ef4444;
