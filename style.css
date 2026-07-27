@@ -43,25 +43,25 @@ body {
 
 /* Black Hole Click Button */
 .css-black-hole {
-  width: 300px;
-  height: 300px;
+  width: 280px;
+  height: 280px;
   margin: 80px auto;
   border-radius: 50%;
   background: radial-gradient(circle, #000 40%, #111 70%, #222 100%);
   position: relative;
   cursor: pointer;
-  box-shadow: 0 0 100px rgba(176, 0, 255, 0.9); /* purple glow */
+  box-shadow: 0 0 100px rgba(176, 0, 255, 0.9);
   transition: transform 0.2s ease;
 }
 .css-black-hole:hover {
-  transform: scale(1.1);
+  transform: scale(1.08);
 }
 
-/* Core */
+/* Core (smaller so it stays inside purple ring) */
 .singularity-core {
   position: absolute;
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
   background: #000;
   border-radius: 50%;
   top: 50%;
@@ -74,34 +74,34 @@ body {
   position: absolute;
   width: 100%;
   height: 100%;
-  border: 6px solid rgba(176, 0, 255, 0.8);
+  border: 8px solid rgba(176, 0, 255, 0.9);
   border-radius: 50%;
-  animation: spin 8s linear infinite;
-  box-shadow: 0 0 40px rgba(176, 0, 255, 0.7);
+  animation: spin 10s linear infinite;
+  box-shadow: 0 0 50px rgba(176, 0, 255, 0.8);
 }
 
-/* Outer Warp Ring (smooth purple glow, no dashed outline) */
+/* Outer Warp Ring (smooth purple glow) */
 .gravitational-lens {
   position: absolute;
-  width: 140%;
-  height: 140%;
+  width: 150%;
+  height: 150%;
   border: 3px solid rgba(120, 0, 180, 0.4);
   border-radius: 50%;
-  top: -20%;
-  left: -20%;
-  animation: spin 16s linear infinite reverse;
+  top: -25%;
+  left: -25%;
+  animation: spin 20s linear infinite reverse;
 }
 
 /* Inner Warp Pulse */
 .cinematic-disk-warp {
   position: absolute;
-  width: 90%;
-  height: 90%;
+  width: 85%;
+  height: 85%;
   border: 3px solid rgba(255, 255, 255, 0.15);
   border-radius: 50%;
-  top: 5%;
-  left: 5%;
-  animation: pulse 4s ease-in-out infinite;
+  top: 7.5%;
+  left: 7.5%;
+  animation: pulse 5s ease-in-out infinite;
 }
 
 /* Animations */
@@ -114,21 +114,22 @@ body {
   50% { transform: scale(1.15); opacity: 1; }
 }
 
-/* Menus */
+/* Settings & Shop Menus */
 .settings-menu,
 .shop-menu {
   display: none;
   position: fixed;
   top: 0;
-  width: 400px;
+  width: 500px;              /* wider */
   height: 100%;
-  background: rgba(20,20,30,0.95);
-  padding: 30px;
+  background: rgba(15, 0, 25, 0.95); /* deep purple-black */
+  padding: 40px;             /* more breathing room */
   overflow-y: auto;
   z-index: 1000;
-  border-left: 2px solid #b000ff;
-  border-right: 2px solid #b000ff;
-  box-shadow: 0 0 50px rgba(176,0,255,0.5);
+  border-left: 3px solid #b000ff;
+  border-right: 3px solid #b000ff;
+  box-shadow: 0 0 60px rgba(176,0,255,0.6);
+  border-radius: 12px;       /* softer corners */
 }
 .settings-menu.open,
 .shop-menu.open {
@@ -137,7 +138,7 @@ body {
 .settings-menu { left: 0; }
 .shop-menu { right: 0; }
 
-/* Buttons */
+/* Toggle Buttons */
 .settings-toggle,
 .shop-toggle {
   position: fixed;
@@ -154,19 +155,20 @@ body {
 .settings-toggle { left: 20px; }
 .shop-toggle { right: 20px; }
 
+/* Shop Buttons */
 .shop-btn {
   display: block;
   width: 100%;
-  padding: 14px;
-  margin-bottom: 16px;
+  padding: 16px;
+  margin-bottom: 18px;
   background: #2a002a;
   border: none;
   color: #fff;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
   text-align: left;
-  font-size: 1.1rem;
-  box-shadow: 0 0 10px rgba(176,0,255,0.6);
+  font-size: 1.2rem;
+  box-shadow: 0 0 12px rgba(176,0,255,0.7);
 }
 .shop-btn:disabled {
   background: #111;
