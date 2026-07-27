@@ -13,16 +13,6 @@ let autoUpgradeCost = 50;
 // Track redeemed codes
 let usedCodes = ["INIT_BLOCK"];
 
-// MULTI-LAYER PRESTIGE INFRASTRUCTURE
-let rebirths = 0;
-let rebirthRequirement = 10000;
-
-let ascensions = 0;
-let ascensionRequirement = 10;
-
-let prestiges = 0;
-let prestigeRequirement = 5;
-
 // DOM Interface Elements
 const scoreDisplay = document.getElementById('score');
 const ppsDisplay = document.getElementById('pps-display');
@@ -82,8 +72,7 @@ function checkEngineVersionPatch() {
                 <div style="text-align:left; color:#fff; line-height:1.6; margin:20px 0; font-size:0.9rem;">
                     • <b>Image-Free:</b> Core replaced with a pure CSS Singularity Anomaly.<br>
                     • <b>Floating Numbers:</b> Manual clicks now spawn real-time particle text.<br>
-                    • <b>Smooth Tick Engine:</b> Upgraded loop structure directly tracking CPS changes.<br>
-                    • <b>Prestige Layers:</b> Added Rebirths, Ascensions, and Reality Prestiges!
+                    • <b>Smooth Tick Engine:</b> Upgraded loop structure tracking CPS seamlessly.
                 </div>
                 <button id="close-patch-btn" style="background:#00ffcc; color:#000; border:none; padding:10px 25px; border-radius:6px; cursor:pointer; font-weight:bold; font-family:inherit;">SYNC DATAFEED</button>
             </div>
@@ -130,38 +119,22 @@ function spawnFloatingText(event, displayText) {
     }, 800);
 }
 
-function getPrestigeMultiplier() {
-    let multiplier = 1;
-    multiplier += rebirths * 0.15;
-    multiplier *= Math.pow(2, ascensions);
-    multiplier *= Math.pow(5, prestiges);
-    return multiplier;
-}
-
 // Main Refresh Engine
 function updateDisplay() {
-    const activeMultiplier = getPrestigeMultiplier();
-    const activeCPS = autoProduction * activeMultiplier;
-    
     scoreDisplay.innerText = Math.floor(score).toLocaleString();
-    ppsDisplay.innerText = `${activeCPS.toFixed(1)} per second`;
+    ppsDisplay.innerText = `${autoProduction} per second`;
     
     buyClickUpBtn.disabled = score < clickUpgradeCost;
     buyClickUpBtn.innerHTML = `Quantum Tap (+1/click)<br><span class="cost">Cost: ${clickUpgradeCost.toLocaleString()}</span>`;
     
     buyAutoUpBtn.disabled = score < autoUpgradeCost;
     buyAutoUpBtn.innerHTML = `Mini Singularity (+1/sec)<br><span class="cost">Cost: ${autoUpgradeCost.toLocaleString()}</span>`;
-    
-    refreshPrestigeUI();
 }
 
 // Interactive Manual Clicking Action
 clickBtn.addEventListener('click', (e) => {
-    const activeMultiplier = getPrestigeMultiplier();
-    const finalClickValue = clickPower * activeMultiplier;
-    
-    score += finalClickValue;
-    spawnFloatingText(e, `+${Math.floor(finalClickValue)}`);
+    score += clickPower;
+    spawnFloatingText(e, `+${clickPower}`);
     updateDisplay();
 });
 
@@ -186,66 +159,101 @@ buyAutoUpBtn.addEventListener('click', () => {
     }
 });
 
-// DYNAMIC PRESTIGE ENGINE HOOKS
-function refreshPrestigeUI() {
-    let prestigeWrapper = document.getElementById('prestige-shop-section');
-    if (!prestigeWrapper) {
-        prestigeWrapper = document.createElement('div');
-        prestigeWrapper.id = 'prestige-shop-section';
-        prestigeWrapper.className = 'shop-section';
-        shopMenu.appendChild(prestigeWrapper);
+// PROMO CODE LOGIC HOOKS
+promoCodeBtn.addEventListener('click', () => {
+    const enteredCode = promoCodeInput.value.trim().toUpperCase();
+    
+    if (enteredCode === "") return;
+
+    if (usedCodes.includes(enteredCode)) {
+        codeMessage.style.color = "#ef4444"; 
+        codeMessage.innerText = "CODE ALREADY REDEEMED!";
+        return;
+    }
+
+    if (enteredCode === "RELEASE!") {
+        score += 500; 
+        successfulRedeem(enteredCode, "Gained 500 Dark Matter!");
+    } 
+    else if (enteredCode === "SECRET") {
+        clickPower += 10; 
+        successfulRedeem(enteredCode, "Quantum Tap boosted +10!");
+    }
+    else {
+        codeMessage.style.color = "#ef4444";
+        codeMessage.innerText = "INVALID QUANTUM CODE!";
     }
     
-    rebirthRequirement = Math.round(10000 * Math.pow(2.5, rebirths));
-    
-    prestigeWrapper.innerHTML = `
-        <h3>Prestige Pathways</h3>
-        <p style="font-size:0.8rem; color:#888; margin:5px 0 12px 0;">Active Multiplier: <b>x${getPrestigeMultiplier().toFixed(2)}</b></p>
-        
-        <button id="rebirth-btn" class="shop-btn" ${score < rebirthRequirement ? 'disabled' : ''} style="margin-bottom:10px;">
-            🌌 Initiate Rebirth (+1)<br><span class="cost">Requires: ${rebirthRequirement.toLocaleString()} Matter</span>
-        </button>
-        <p style="font-size:0.75rem; color:#00ffcc; margin:-5px 0 10px 5px;">Current Rebirths: ${rebirths}</p>
+    promoCodeInput.value = ""; 
+});
 
-        <button id="ascension-btn" class="shop-btn" ${rebirths < ascensionRequirement ? 'disabled' : ''} style="margin-bottom:10px; border-color:#00ffcc; color:#00ffcc;">
-            🌟 Ascend Reality<br><span class="cost" style="color:#fff;">Requires: ${ascensionRequirement} Rebirths</span>
-        </button>
-        <p style="font-size:0.75rem; color:#b54fff; margin:-5px 0 10px 5px;">Current Ascensions: ${ascensions}</p>
-
-        <button id="prestige-btn" class="shop-btn" ${ascensions < prestigeRequirement ? 'disabled' : ''} style="border-color:#ef4444; color:#ef4444;">
-            👁️ Transcendent Prestige<br><span class="cost" style="color:#fff;">Requires: ${prestigeRequirement} Ascensions</span>
-        </button>
-        <p style="font-size:0.75rem; color:#ef4444; margin:5px 0 0 5px;">Current Prestiges: ${prestiges}</p>
-    `;
-
-    document.getElementById('rebirth-btn').addEventListener('click', executeRebirth);
-    document.getElementById('ascension-btn').addEventListener('click', executeAscension);
-    document.getElementById('prestige-btn').addEventListener('click', executePrestigeReset);
-    
-    applyMilestoneCosmetics();
+function successfulRedeem(code, successText) {
+    usedCodes.push(code); 
+    codeMessage.style.color = "#00ffcc"; 
+    codeMessage.innerText = `SUCCESS: ${successText}`;
+    updateDisplay();
+    saveGame();
 }
 
-function executeRebirth() {
-    if (score >= rebirthRequirement) {
-        rebirths += 1;
+// LOCAL STORAGE SYSTEM
+function saveGame() {
+    const gameState = {
+        score: score,
+        clickPower: clickPower,
+        autoProduction: autoProduction,
+        clickUpgradeCost: clickUpgradeCost,
+        autoUpgradeCost: autoUpgradeCost,
+        usedCodes: usedCodes
+    };
+    localStorage.setItem('blackholeClickerSave', JSON.stringify(gameState));
+}
+
+function loadGame() {
+    const savedData = localStorage.getItem('blackholeClickerSave');
+    if (savedData) {
+        const gameState = JSON.parse(savedData);
+        score = gameState.score || 0;
+        clickPower = gameState.clickPower || 1;
+        autoProduction = gameState.autoProduction || 0;
+        clickUpgradeCost = gameState.clickUpgradeCost || 15;
+        autoUpgradeCost = gameState.autoUpgradeCost || 50;
+        usedCodes = gameState.usedCodes || ["INIT_BLOCK"];
+    }
+}
+
+hardResetBtn.addEventListener('click', () => {
+    const confirmReset = confirm("Are you completely sure you want to collapse reality? This deletes ALL your progress permanently.");
+    if (confirmReset) {
+        localStorage.removeItem('blackholeClickerSave');
+        localStorage.removeItem('blackholeClickerVersion');
+        
         score = 0;
         clickPower = 1;
         autoProduction = 0;
         clickUpgradeCost = 15;
         autoUpgradeCost = 50;
+        usedCodes = ["INIT_BLOCK"];
         
-        shopMenu.classList.remove('open');
+        settingsMenu.classList.remove('open');
         updateDisplay();
-        saveGame();
-        alert("✨ Reality folded! Your matter has consolidated into cosmic rebirth resonance (+15% Production Boost).");
     }
-}
+});
 
-function executeAscension() {
-    if (rebirths >= ascensionRequirement) {
-        ascensions += 1;
-        rebirths = 0;
-        score = 0;
-        clickPower = 1;
-        autoProduction = 0;
-        clickUpgradeCost = 15;
+// UPGRADED TICK ENGINE
+// Splitting production into 20 micro-ticks a second makes the counter climb smoothly
+setInterval(() => {
+    if (autoProduction > 0) {
+        score += (autoProduction / 20);
+        updateDisplay();
+    }
+}, 50);
+
+// Save game progress data safely every 5 seconds
+setInterval(() => {
+    saveGame();
+}, 5000);
+
+// Initialize Game Execution
+loadGame();
+checkEngineVersionPatch();
+updateDisplay();
