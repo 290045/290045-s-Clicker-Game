@@ -1,18 +1,17 @@
 // Current Application Engine Patch Configuration
-const CURRENT_VERSION = "1.0.0";
+const CURRENT_VERSION = "1.2.0";
 
 // Game State Core Variables
 let score = 0;
 let clickPower = 1;
 let autoProduction = 0;
 
-// Track redeemed codes
-let usedCodes = ["INIT_BLOCK"];
+// FIXED: String-based tracking completely prevents broken brackets or punctuation errors!
+let usedCodes = "NONE";
 
 // ==========================================
 // 🌌 THE MASSIVE UPGRADE REGISTRY DATABASE
 // ==========================================
-// Any upgrade you add to this list automatically generates its own shop button!
 let upgrades = [
     // --- MANUAL CLICK UPGRADES ---
     {
@@ -304,4 +303,3 @@ function updateDisplay() {
         const btn = document.getElementById(`btn-${upgrade.id}`);
         if (btn) {
             btn.disabled = score < upgrade.currentCost;
-            btn.innerHTML = `
