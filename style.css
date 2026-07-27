@@ -33,8 +33,8 @@ body {
 .counter-box h1 {
   font-size: 5rem;
   margin: 20px 0;
-  color: #00ffcc;
-  text-shadow: 0 0 25px rgba(0,255,204,0.9);
+  color: #b000ff; /* bright purple */
+  text-shadow: 0 0 25px rgba(176,0,255,0.9);
 }
 .counter-box .sub-label {
   font-size: 1.2rem;
@@ -50,14 +50,14 @@ body {
   background: radial-gradient(circle, #000 40%, #111 70%, #222 100%);
   position: relative;
   cursor: pointer;
-  box-shadow: 0 0 100px rgba(161, 36, 255, 1);
+  box-shadow: 0 0 100px rgba(176, 0, 255, 0.9); /* purple glow */
   transition: transform 0.2s ease;
 }
 .css-black-hole:hover {
   transform: scale(1.1);
 }
 
-/* Black Hole Layers */
+/* Core */
 .singularity-core {
   position: absolute;
   width: 80px;
@@ -68,35 +68,43 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+/* Accretion Disk (purple ring that spins with the black hole) */
 .accretion-disk {
   position: absolute;
   width: 100%;
   height: 100%;
-  border: 6px solid #a124ff;
+  border: 6px solid rgba(176, 0, 255, 0.8);
   border-radius: 50%;
   animation: spin 8s linear infinite;
+  box-shadow: 0 0 40px rgba(176, 0, 255, 0.7);
 }
+
+/* Outer Warp Ring (smooth purple glow, no dashed outline) */
 .gravitational-lens {
   position: absolute;
-  width: 180%;
-  height: 180%;
-  border: 3px dashed #ffffff;
+  width: 140%;
+  height: 140%;
+  border: 3px solid rgba(120, 0, 180, 0.4);
   border-radius: 50%;
-  top: -40%;
-  left: -40%;
+  top: -20%;
+  left: -20%;
   animation: spin 16s linear infinite reverse;
 }
+
+/* Inner Warp Pulse */
 .cinematic-disk-warp {
   position: absolute;
   width: 90%;
   height: 90%;
-  border: 3px solid rgba(255,255,255,0.3);
+  border: 3px solid rgba(255, 255, 255, 0.15);
   border-radius: 50%;
   top: 5%;
   left: 5%;
   animation: pulse 4s ease-in-out infinite;
 }
 
+/* Animations */
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
@@ -118,9 +126,9 @@ body {
   padding: 30px;
   overflow-y: auto;
   z-index: 1000;
-  border-left: 2px solid #a124ff;
-  border-right: 2px solid #00ffcc;
-  box-shadow: 0 0 50px rgba(0,255,204,0.5);
+  border-left: 2px solid #b000ff;
+  border-right: 2px solid #b000ff;
+  box-shadow: 0 0 50px rgba(176,0,255,0.5);
 }
 .settings-menu.open,
 .shop-menu.open {
@@ -136,12 +144,12 @@ body {
   top: 20px;
   padding: 14px 22px;
   cursor: pointer;
-  background: linear-gradient(90deg, #a124ff, #00ffcc);
+  background: linear-gradient(90deg, #4a004a, #b000ff);
   border: none;
   color: #fff;
   border-radius: 10px;
   font-weight: bold;
-  box-shadow: 0 0 20px rgba(0,255,204,0.7);
+  box-shadow: 0 0 20px rgba(176,0,255,0.7);
 }
 .settings-toggle { left: 20px; }
 .shop-toggle { right: 20px; }
@@ -151,18 +159,18 @@ body {
   width: 100%;
   padding: 14px;
   margin-bottom: 16px;
-  background: #333;
+  background: #2a002a;
   border: none;
   color: #fff;
   border-radius: 8px;
   cursor: pointer;
   text-align: left;
   font-size: 1.1rem;
-  box-shadow: 0 0 10px rgba(161,36,255,0.6);
+  box-shadow: 0 0 10px rgba(176,0,255,0.6);
 }
 .shop-btn:disabled {
-  background: #222;
-  color: #666;
+  background: #111;
+  color: #555;
   cursor: not-allowed;
   box-shadow: none;
 }
@@ -171,7 +179,7 @@ body {
 .code-msg {
   margin-top: 12px;
   font-size: 1rem;
-  color: #00ffcc;
+  color: #b000ff;
 }
 
 /* Reset Warning */
