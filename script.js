@@ -65,12 +65,12 @@ document.addEventListener("DOMContentLoaded", () => {
         textNode.style.position = "fixed";
         textNode.style.left = `${event.clientX}px`;
         textNode.style.top = `${event.clientY}px`;
-        textNode.style.color = "#e0aa85";
+        textNode.style.color = "#b000ff";
         textNode.style.fontWeight = "bold";
         textNode.style.fontSize = "1.3rem";
         textNode.style.pointerEvents = "none";
         textNode.style.zIndex = "999";
-        textNode.style.textShadow = "0 0 8px rgba(224, 170, 133, 0.8)";
+        textNode.style.textShadow = "0 0 12px rgba(176,0,255,0.9)";
         textNode.style.transition = "transform 0.8s, opacity 0.8s";
         document.body.appendChild(textNode);
         requestAnimationFrame(() => {
@@ -173,5 +173,27 @@ document.addEventListener("DOMContentLoaded", () => {
             location.reload();
         }
     });
+    // Promo Codes
+    promoCodeBtn.addEventListener("click", () => {
+        const code = promoCodeInput.value.trim().toUpperCase();
 
-    // Promo
+        if (code === "RELEASE" && usedCodes.indexOf("RELEASE") === -1) {
+            score += 1000;
+            usedCodes += "RELEASE";
+            codeMessage.innerText = "✨ CODE ACCEPTED: +1,000 Dark Matter!";
+        } else {
+            codeMessage.innerText = "❌ INVALID OR ALREADY USED CODE";
+        }
+
+        updateDisplay();
+        saveGame();
+    });
+
+    // Initialize game on load
+    loadGame();
+    buildShopInterfaceButtons();
+    updateDisplay();
+
+    // Auto-save every 10 seconds
+    setInterval(saveGame, 10000);
+});
