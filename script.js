@@ -10,24 +10,23 @@ let autoProduction = 0;
 let clickUpgradeCost = 15;
 let autoUpgradeCost = 50;
 
-// Track redeemed codes so they can't be used twice
-let usedCodes = [];
+// Track redeemed codes
+let usedCodes = ["INIT_BLOCK"];
 
-// NEW: MULTI-LAYER PRESTIGE INFRASTRUCTURE
+// MULTI-LAYER PRESTIGE INFRASTRUCTURE
 let rebirths = 0;
-let rebirthRequirement = 10000; // Base requirement for 1st Rebirth
+let rebirthRequirement = 10000;
 
 let ascensions = 0;
-let ascensionRequirement = 10; // Requires 10 Rebirths
+let ascensionRequirement = 10;
 
 let prestiges = 0;
-let prestigeRequirement = 5; // Requires 5 Ascensions
+let prestigeRequirement = 5;
 
 // DOM Interface Elements
 const scoreDisplay = document.getElementById('score');
 const ppsDisplay = document.getElementById('pps-display');
 const clickBtn = document.getElementById('click-btn');
-const clickBtnContainer = document.getElementById('click-btn-container');
 
 // Shop UI Interface Components
 const shopMenu = document.getElementById('shop-menu');
@@ -70,19 +69,15 @@ settingsToggleBtn.addEventListener('click', () => {
 });
 settingsCloseBtn.addEventListener('click', () => settingsMenu.classList.remove('open'));
 
-// ==========================================
-// NEW: DYNAMIC VERSION NOTIFICATION MODAL
-// ==========================================
+// DYNAMIC VERSION NOTIFICATION MODAL
 function checkEngineVersionPatch() {
     const savedPatch = localStorage.getItem('blackholeClickerVersion');
     if (savedPatch !== CURRENT_VERSION) {
-        // Create full overlay background container block cleanly via JS
         const patchOverlay = document.createElement('div');
         patchOverlay.style = "position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(5,2,15,0.95); z-index:9999; display:flex; justify-content:center; align-items:center; font-family:monospace; color:#00ffcc;";
         
-        // Assembles a styled text card layout directly over the canvas core
         patchOverlay.innerHTML = `
-            <div style="border:2px solid #a124ff; padding:30px; border-radius:12px; background:#0b061a; max-width:450px; width:90%; box-shadow:0 0 30px rgba(161,36,255,0.5); text-align:center;">
+            <div style="border:2px solid #a124ff; padding:30px; border-radius:12px; background:#0b061a; max-width:450px; width:90%; box-shadow:0 0 30px rgba(161,36,255,0.5); text-align:center; pointer-events:auto;">
                 <h2 style="color:#a124ff; margin-top:0;">🚀 SYSTEM PATCH v${CURRENT_VERSION}</h2>
                 <div style="text-align:left; color:#fff; line-height:1.6; margin:20px 0; font-size:0.9rem;">
                     • <b>Image-Free:</b> Core replaced with a pure CSS Singularity Anomaly.<br>
@@ -102,14 +97,11 @@ function checkEngineVersionPatch() {
     }
 }
 
-// ==========================================
-// NEW: FLOATING RISING TEXT ALGORITHM
-// ==========================================
+// FLOATING RISING TEXT ALGORITHM
 function spawnFloatingText(event, displayText) {
     const textNode = document.createElement('span');
     textNode.innerText = displayText;
     
-    // Exact structural coordinates based on mouse cursor intersection
     const clickX = event.clientX;
     const clickY = event.clientY;
     
@@ -126,13 +118,11 @@ function spawnFloatingText(event, displayText) {
     
     document.body.appendChild(textNode);
     
-    // Micro-delay loop allows browser to parse physics transform frames accurately
     requestAnimationFrame(() => {
         textNode.style.transform = 'translate(-50%, -60px)';
         textNode.style.opacity = '0';
     });
     
-    // Purges node from document tree to eliminate browser lag entirely
     setTimeout(() => {
         if (textNode.parentNode) {
             document.body.removeChild(textNode);
@@ -140,12 +130,11 @@ function spawnFloatingText(event, displayText) {
     }, 800);
 }
 
-// Calculates dynamic multipliers based on current prestige standings
 function getPrestigeMultiplier() {
     let multiplier = 1;
-    multiplier += rebirths * 0.15; // +15% boost per Rebirth
-    multiplier *= Math.pow(2, ascensions); // Double production per Ascension
-    multiplier *= Math.pow(5, prestiges); // 5x production per Reality Prestige
+    multiplier += rebirths * 0.15;
+    multiplier *= Math.pow(2, ascensions);
+    multiplier *= Math.pow(5, prestiges);
     return multiplier;
 }
 
@@ -163,7 +152,6 @@ function updateDisplay() {
     buyAutoUpBtn.disabled = score < autoUpgradeCost;
     buyAutoUpBtn.innerHTML = `Mini Singularity (+1/sec)<br><span class="cost">Cost: ${autoUpgradeCost.toLocaleString()}</span>`;
     
-    // Dynamically injects or updates prestige panels inside the sidebar menus
     refreshPrestigeUI();
 }
 
@@ -198,11 +186,8 @@ buyAutoUpBtn.addEventListener('click', () => {
     }
 });
 
-// ==========================================
-// NEW: DYNAMIC PRESTIGE ENGINE HOOKS
-// ==========================================
+// DYNAMIC PRESTIGE ENGINE HOOKS
 function refreshPrestigeUI() {
-    // Ensures a dedicated prestige section area container exists inside the shop menu drawer
     let prestigeWrapper = document.getElementById('prestige-shop-section');
     if (!prestigeWrapper) {
         prestigeWrapper = document.createElement('div');
@@ -211,7 +196,6 @@ function refreshPrestigeUI() {
         shopMenu.appendChild(prestigeWrapper);
     }
     
-    // Calculate current milestone scaling metrics
     rebirthRequirement = Math.round(10000 * Math.pow(2.5, rebirths));
     
     prestigeWrapper.innerHTML = `
@@ -228,3 +212,40 @@ function refreshPrestigeUI() {
         </button>
         <p style="font-size:0.75rem; color:#b54fff; margin:-5px 0 10px 5px;">Current Ascensions: ${ascensions}</p>
 
+        <button id="prestige-btn" class="shop-btn" ${ascensions < prestigeRequirement ? 'disabled' : ''} style="border-color:#ef4444; color:#ef4444;">
+            👁️ Transcendent Prestige<br><span class="cost" style="color:#fff;">Requires: ${prestigeRequirement} Ascensions</span>
+        </button>
+        <p style="font-size:0.75rem; color:#ef4444; margin:5px 0 0 5px;">Current Prestiges: ${prestiges}</p>
+    `;
+
+    document.getElementById('rebirth-btn').addEventListener('click', executeRebirth);
+    document.getElementById('ascension-btn').addEventListener('click', executeAscension);
+    document.getElementById('prestige-btn').addEventListener('click', executePrestigeReset);
+    
+    applyMilestoneCosmetics();
+}
+
+function executeRebirth() {
+    if (score >= rebirthRequirement) {
+        rebirths += 1;
+        score = 0;
+        clickPower = 1;
+        autoProduction = 0;
+        clickUpgradeCost = 15;
+        autoUpgradeCost = 50;
+        
+        shopMenu.classList.remove('open');
+        updateDisplay();
+        saveGame();
+        alert("✨ Reality folded! Your matter has consolidated into cosmic rebirth resonance (+15% Production Boost).");
+    }
+}
+
+function executeAscension() {
+    if (rebirths >= ascensionRequirement) {
+        ascensions += 1;
+        rebirths = 0;
+        score = 0;
+        clickPower = 1;
+        autoProduction = 0;
+        clickUpgradeCost = 15;
